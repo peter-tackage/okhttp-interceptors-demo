@@ -1,0 +1,82 @@
+package com.moac.android.interceptordemo.injection.module;
+
+import com.google.gson.Gson;
+import com.moac.android.interceptordemo.api.SoundCloudApi;
+import com.moac.android.interceptordemo.api.SoundCloudRequestInterceptor;
+import com.squareup.okhttp.OkHttpClient;
+
+import javax.inject.Named;
+import javax.inject.Singleton;
+
+import dagger.Module;
+import dagger.Provides;
+import retrofit.Endpoint;
+import retrofit.Endpoints;
+import retrofit.RequestInterceptor;
+import retrofit.RestAdapter;
+import retrofit.client.Client;
+import retrofit.client.OkClient;
+import retrofit.converter.Converter;
+import retrofit.converter.GsonConverter;
+
+@Module(complete = false, library = true)
+public class ApiModule {
+
+    private static final String TAG = ApiModule.class.getSimpleName();
+
+    // Required configuration settings definitions //
+
+    static final String API_CLIENT_ID = "ApiClientId";
+    static final String API_ENDPOINT_URL = "ApiEndpointUrl";
+
+    // Injection providers //
+
+    @Provides
+    @Singleton
+    Client provideClient(@NetworkModule.Api OkHttpClient client) {
+        return new OkClient(client);
+    }
+
+    @Provides
+    @Singleton
+    RequestInterceptor provideRequestInterceptor(@Named(API_CLIENT_ID) String clientId) {
+        return new SoundCloudRequestInterceptor(clientId);
+    }
+
+    @Provides
+    @Singleton
+    Endpoint provideEndPoint(@Named(API_ENDPOINT_URL) String endpointUrl) {
+        return Endpoints.newFixedEndpoint(endpointUrl);
+    }
+
+    @Provides
+    @Singleton
+    Converter provideConverter() {
+        return new GsonConverter(new Gson());
+    }
+
+    @Provides
+    @Singleton
+    RestAdapter provideSoundCloudApiRestAdapter(Client client,
+                                                RequestInterceptor interceptor, Converter converter,
+                                                //  ErrorHandler errorHandler,
+                                                Endpoint endpoint,
+                                                RestAdapter.Log logger) {
+        return new RestAdapter.Builder()
+                .setClient(client)
+                .setRequestInterceptor(interceptor)
+                .setConverter(converter)
+                .setLogLevel(RestAdapter.LogLevel.FULL)
+                        //  .setErrorHandler(errorHandler)
+                .setEndpoint(endpoint)
+                .setLog(logger)
+                .build();
+    }
+
+    @Provides
+    @Singleton
+    SoundCloudApi provideSoundCloudApi(RestAdapter restAdapter) {
+        return restAdapter.create(SoundCloudApi.class);
+    }
+
+}
