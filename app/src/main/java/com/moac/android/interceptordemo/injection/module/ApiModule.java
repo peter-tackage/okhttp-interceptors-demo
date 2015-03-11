@@ -58,8 +58,8 @@ public class ApiModule {
     @Provides
     @Singleton
     RestAdapter provideSoundCloudApiRestAdapter(Client client,
-                                                RequestInterceptor interceptor, Converter converter,
-                                                //  ErrorHandler errorHandler,
+                                                RequestInterceptor interceptor,
+                                                Converter converter,
                                                 Endpoint endpoint,
                                                 RestAdapter.Log logger) {
         return new RestAdapter.Builder()
@@ -67,7 +67,6 @@ public class ApiModule {
                 .setRequestInterceptor(interceptor)
                 .setConverter(converter)
                 .setLogLevel(RestAdapter.LogLevel.FULL)
-                        //  .setErrorHandler(errorHandler)
                 .setEndpoint(endpoint)
                 .setLog(logger)
                 .build();
