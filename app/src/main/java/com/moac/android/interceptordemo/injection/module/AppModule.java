@@ -18,7 +18,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * Top level app specific modules
  */
 @Module(library = true,
-        includes = {ConfigModule.class, NetworkModule.class, ApiModule.class, ImagesModule.class, LoggingModule.class},
+        includes = {ConfigModule.class, NetworkModule.class, ApiModule.class, ImagesModule.class, InterceptorModule.class},
         injects = DemoApplication.class)
 public class AppModule {
 

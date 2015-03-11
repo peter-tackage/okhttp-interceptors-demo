@@ -1,5 +1,7 @@
 package com.moac.android.interceptordemo.injection.module;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.moac.android.interceptordemo.api.SoundCloudApi;
 import com.moac.android.interceptordemo.api.SoundCloudRequestInterceptor;
@@ -45,14 +47,24 @@ public class ApiModule {
 
     @Provides
     @Singleton
+    Converter provideConverter() {
+        return new GsonConverter(new Gson());
+    }
+
+    @Provides
+    @Singleton
     Endpoint provideEndPoint(@Named(API_ENDPOINT_URL) String endpointUrl) {
         return Endpoints.newFixedEndpoint(endpointUrl);
     }
 
     @Provides
     @Singleton
-    Converter provideConverter() {
-        return new GsonConverter(new Gson());
+    RestAdapter.Log provideLogger() {
+        return new RestAdapter.Log() {
+            public void log(String msg) {
+                Log.i("Retrofit|SoundCloud", msg);
+            }
+        };
     }
 
     @Provides

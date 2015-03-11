@@ -3,7 +3,6 @@ package com.moac.android.interceptordemo.injection.module;
 import android.content.Context;
 import android.util.Log;
 
-import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
@@ -11,6 +10,7 @@ import com.squareup.okhttp.OkHttpClient;
 import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Retention;
+import java.util.List;
 
 import javax.inject.Named;
 import javax.inject.Qualifier;
@@ -35,12 +35,12 @@ public class NetworkModule {
 
     @Qualifier
     @Retention(RUNTIME)
-    public static @interface AppLogging {
+    public static @interface AppInterceptors {
     }
 
     @Qualifier
     @Retention(RUNTIME)
-    public static @interface NetworkLogging {
+    public static @interface NetworkInterceptors {
     }
 
     // Scopes //
@@ -77,16 +77,10 @@ public class NetworkModule {
 
     @Provides
     @Singleton
-    StethoInterceptor provideStethoInterceptor() {
-        return new StethoInterceptor();
-    }
-
-    @Provides
-    @Singleton
     @Api
     OkHttpClient provideApiOkHttpClient(@Api Cache cache,
-                                        @AppLogging Interceptor appInterceptor,
-                                        @NetworkLogging Interceptor networkInterceptor) {
+                                        @AppInterceptors List<Interceptor> appInterceptor,
+                                        @NetworkInterceptors List<Interceptor> networkInterceptor) {
         return createOkHttpClient(cache, appInterceptor, networkInterceptor);
     }
 
@@ -94,8 +88,8 @@ public class NetworkModule {
     @Singleton
     @Images
     OkHttpClient provideImagesOkHttpClient(@Images Cache cache,
-                                           @AppLogging Interceptor appInterceptor,
-                                           @NetworkLogging Interceptor networkInterceptor) {
+                                           @AppInterceptors List<Interceptor> appInterceptor,
+                                           @NetworkInterceptors List<Interceptor> networkInterceptor) {
         return createOkHttpClient(cache, appInterceptor, networkInterceptor);
     }
 
@@ -114,8 +108,8 @@ public class NetworkModule {
     }
 
     private static OkHttpClient createOkHttpClient(Cache cache,
-                                                   Interceptor appInterceptor,
-                                                   Interceptor networkInterceptor) {
+                                                   List<Interceptor> appInterceptors,
+                                                   List<Interceptor> networkInterceptors) {
         OkHttpClient client = new OkHttpClient();
 
         // If failed to create disk cache, still use OkHttp default internal cache
@@ -124,8 +118,8 @@ public class NetworkModule {
         }
 
         // Install interceptors
-        client.networkInterceptors().add(networkInterceptor);
-        client.interceptors().add(appInterceptor);
+        client.interceptors().addAll(appInterceptors);
+        client.networkInterceptors().addAll(networkInterceptors);
 
         return client;
     }
