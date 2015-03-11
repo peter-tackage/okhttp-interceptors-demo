@@ -54,7 +54,7 @@ public class DisplayFragment extends InjectingFragment {
 
     // Configuration
     private Observable<String> mGenre = Observable.just("ambient");
-    private Observable<Long> mLimit = Observable.just(10l);
+    private Observable<Long> mLimit = Observable.just(15l);
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

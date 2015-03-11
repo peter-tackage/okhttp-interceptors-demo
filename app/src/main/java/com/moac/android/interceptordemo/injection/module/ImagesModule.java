@@ -21,6 +21,7 @@ public class ImagesModule {
     Picasso providePicasso(@AppModule.ForApplication Context context,
                            @NetworkModule.Images OkHttpClient okHttpClient) {
         return new Picasso.Builder(context)
+                .loggingEnabled(true)
                 .downloader(new OkHttpDownloader(okHttpClient))
                 .build();
     }

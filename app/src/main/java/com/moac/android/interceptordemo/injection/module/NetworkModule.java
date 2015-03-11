@@ -116,6 +116,11 @@ public class NetworkModule {
         if (cache != null) {
             client.setCache(cache);
         }
+        try {
+            client.getCache().evictAll();
+        } catch (IOException ioe) {
+           Log.w(TAG, "Error evicting all from cache", ioe);
+        }
 
         // Install interceptors
         client.interceptors().addAll(appInterceptors);
