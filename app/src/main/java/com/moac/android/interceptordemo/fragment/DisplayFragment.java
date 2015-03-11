@@ -75,7 +75,8 @@ public class DisplayFragment extends InjectingFragment {
                             @Override
                             public void call(TrackViewModel trackViewModel) {
                                 Log.i(TAG, "Rendering new track: " + trackViewModel);
-                                mPicasso.load(trackViewModel.getArtworkUrl()).into(mTrackImageView);
+                                mPicasso.load(trackViewModel.getArtworkUrl())
+                                        .into(mTrackImageView);
                                 mArtistTextView.setText(trackViewModel.getArtist());
                                 mTitleTextView.setText(trackViewModel.getTitle());
                             }

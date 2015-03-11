@@ -1,9 +1,8 @@
 package com.moac.android.interceptordemo.injection.module;
 
-import android.util.Log;
-
 import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.moac.android.interceptordemo.network.LoggingInterceptor;
+import com.moac.android.interceptordemo.network.NeverCacheInterceptor;
 import com.squareup.okhttp.Interceptor;
 
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import retrofit.RestAdapter;
 
 /*
  * Provides implementation of interceptors
@@ -35,8 +33,8 @@ public class InterceptorModule {
     @NetworkModule.NetworkInterceptors
     List<Interceptor> provideNetworkInterceptors(StethoInterceptor stethoInterceptor) {
         ArrayList<Interceptor> networkInterceptors = new ArrayList<>();
-        //  networkInterceptors.add(new NeverCacheInterceptor());
-       // networkInterceptors.add(stethoInterceptor);
+        networkInterceptors.add(new NeverCacheInterceptor());
+        networkInterceptors.add(stethoInterceptor);
         return networkInterceptors;
     }
 
