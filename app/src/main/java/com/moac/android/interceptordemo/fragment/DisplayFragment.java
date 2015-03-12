@@ -54,7 +54,7 @@ public class DisplayFragment extends InjectingFragment {
 
     // Configuration
     private Observable<String> mGenre = Observable.just("ambient");
-    private Observable<Long> mLimit = Observable.just(15l);
+    private Observable<Long> mLimit = Observable.just(15l); // fetch 15 tracks
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -70,6 +70,7 @@ public class DisplayFragment extends InjectingFragment {
         super.onStart();
         mViewModelSubscription =
                 AppObservable.bindFragment(this,
+                        // Change displayed track every 5 seconds
                         mViewModelProvider.getObservableViewModel(5, TimeUnit.SECONDS))
                         .subscribe(new Action1<TrackViewModel>() {
                             @Override
@@ -93,14 +94,14 @@ public class DisplayFragment extends InjectingFragment {
                         });
 
 
-        // Fetch a new set of tracks every 1 minute
+        // Fetch a new set of tracks every 20 seconds
         mFetchScheduler.start(20, TimeUnit.SECONDS,
                 new TrackFetcher(mTracksProvider,
                         mViewModelProvider.asDestination(),
                         new SimpleObserver<List<Track>>() {
                             @Override
                             public void onError(Throwable e) {
-                                Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "Error - " + e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         },
                         mGenre,

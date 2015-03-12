@@ -1,6 +1,7 @@
 package com.moac.android.interceptordemo.injection.module;
 
 import com.facebook.stetho.okhttp.StethoInterceptor;
+import com.moac.android.interceptordemo.network.AssertNoCacheInterceptor;
 import com.moac.android.interceptordemo.network.LoggingInterceptor;
 import com.moac.android.interceptordemo.network.NeverCacheInterceptor;
 import com.squareup.okhttp.Interceptor;
@@ -25,6 +26,8 @@ public class InterceptorModule {
     List<Interceptor> provideAppInterceptors() {
         ArrayList<Interceptor> appInterceptors = new ArrayList<>();
         appInterceptors.add(new LoggingInterceptor("HTTP|SoundCloud"));
+        // Uncomment to test cache header removed by Network Interceptors
+        appInterceptors.add(new AssertNoCacheInterceptor());
         return appInterceptors;
     }
 
@@ -33,6 +36,8 @@ public class InterceptorModule {
     @NetworkModule.NetworkInterceptors
     List<Interceptor> provideNetworkInterceptors(StethoInterceptor stethoInterceptor) {
         ArrayList<Interceptor> networkInterceptors = new ArrayList<>();
+        // Uncomment this to remove caching
+        networkInterceptors.add(new AssertNoCacheInterceptor());
         networkInterceptors.add(new NeverCacheInterceptor());
         networkInterceptors.add(stethoInterceptor);
         return networkInterceptors;
