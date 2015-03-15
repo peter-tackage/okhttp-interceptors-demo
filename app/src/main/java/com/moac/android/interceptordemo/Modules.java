@@ -3,8 +3,8 @@ package com.moac.android.interceptordemo;
 import android.app.Activity;
 import android.app.Application;
 
-import com.moac.android.interceptordemo.injection.module.AppModule;
-import com.moac.android.interceptordemo.injection.module.UiModule;
+import com.moac.android.interceptordemo.module.AppModule;
+import com.moac.android.interceptordemo.module.UiModule;
 
 public class Modules {
 

@@ -9,10 +9,6 @@ import rx.android.schedulers.AndroidSchedulers;
 
 public class ViewModels {
 
-    public static <T> Observable<T> from(Observable<T> observable) {
-        return observable.observeOn(AndroidSchedulers.mainThread());
-    }
-
     public static <T> Subscription fetchInto(Observable<T> source, final Observer<T> destination,
                                              LoggingObserver<T> fetchObserver) {
         return source

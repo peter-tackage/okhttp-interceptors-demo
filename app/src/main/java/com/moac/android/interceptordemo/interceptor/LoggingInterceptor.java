@@ -1,4 +1,4 @@
-package com.moac.android.interceptordemo.network;
+package com.moac.android.interceptordemo.interceptor;
 
 import android.util.Log;
 
@@ -8,6 +8,10 @@ import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 
+/*
+ * This is only very slightly adapted from OkHttp Recipes version -
+ * https://github.com/square/okhttp/tree/master/samples/guide/src/main/java/com/squareup/okhttp/recipes
+ */
 public class LoggingInterceptor implements Interceptor {
     private final String mLogTag;
 

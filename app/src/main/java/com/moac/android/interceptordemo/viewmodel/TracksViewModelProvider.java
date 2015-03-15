@@ -90,7 +90,6 @@ public class TracksViewModelProvider {
         String fileWithoutSizeSuffix = imageUrl.substring(0, sizeSuffixIndex);
         String extension = imageUrl.substring(imageUrl.lastIndexOf('.'));
 
-
         return fileWithoutSizeSuffix + HIGHRES_SIZE_SUFFIX + extension;
 
     }

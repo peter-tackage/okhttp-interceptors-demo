@@ -1,4 +1,4 @@
-package com.moac.android.interceptordemo.injection.module;
+package com.moac.android.interceptordemo.module;
 
 import android.content.Context;
 import android.util.Log;
@@ -29,9 +29,9 @@ public class NetworkModule {
     // Required configuration settings definitions //
 
     static final String API_CACHE_NAME = "ApiCacheName";
-    static final String API_CACHE_SIZE = "ApiCacheSize";
+    static final String API_CACHE_SIZE_IN_BYTES = "ApiCacheSizeInBytes";
     static final String IMAGES_CACHE_NAME = "ImagesCacheName";
-    static final String IMAGES_CACHE_SIZE = "ImagesCacheSize";
+    static final String IMAGES_CACHE_SIZE_IN_BYTES = "ImagesCacheSizeInBytes";
 
     @Qualifier
     @Retention(RUNTIME)
@@ -62,7 +62,7 @@ public class NetworkModule {
     @Api
     Cache provideHttpCache(@AppModule.ForApplication Context context,
                            @Named(API_CACHE_NAME) String cacheDirName,
-                           @Named(API_CACHE_SIZE) long cacheSizeMegaBytes) {
+                           @Named(API_CACHE_SIZE_IN_BYTES) long cacheSizeMegaBytes) {
         return createCache(context, cacheDirName, cacheSizeMegaBytes);
     }
 
@@ -71,7 +71,7 @@ public class NetworkModule {
     @Images
     Cache provideImagesCache(@AppModule.ForApplication Context context,
                              @Named(IMAGES_CACHE_NAME) String cacheDirName,
-                             @Named(IMAGES_CACHE_SIZE) long cacheSizeMegaBytes) {
+                             @Named(IMAGES_CACHE_SIZE_IN_BYTES) long cacheSizeMegaBytes) {
         return createCache(context, cacheDirName, cacheSizeMegaBytes);
     }
 

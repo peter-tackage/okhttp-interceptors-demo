@@ -1,18 +1,21 @@
-package com.moac.android.interceptordemo.network;
+package com.moac.android.interceptordemo.interceptor;
 
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 
+/**
+ * Throws an IllegalStateException if the response contains a Cache-Control header
+ */
 public class AssertNoCacheInterceptor implements Interceptor {
 
     @Override
     public Response intercept(Chain chain) throws IOException {
-        Response originalResponse = chain.proceed(chain.request());
-        if (originalResponse.header("Cache-Control") != null) {
+        Response response = chain.proceed(chain.request());
+        if (response.header("Cache-Control") != null) {
             throw new IllegalStateException("Expected an empty cache header");
         }
-        return originalResponse;
+        return response;
     }
 }

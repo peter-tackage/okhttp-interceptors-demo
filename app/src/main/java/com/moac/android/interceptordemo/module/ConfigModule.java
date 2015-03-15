@@ -1,4 +1,4 @@
-package com.moac.android.interceptordemo.injection.module;
+package com.moac.android.interceptordemo.module;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -18,7 +18,7 @@ public class ConfigModule {
     @Singleton
     @Named(ApiModule.API_CLIENT_ID)
     String provideClientId() {
-        return "YOUNEEDTOCHANGETHIS";
+        throw new IllegalStateException("You need to provide your own SoundCloud API client id");
     }
 
     @Provides
@@ -29,6 +29,7 @@ public class ConfigModule {
     }
 
     @Provides
+    @Singleton
     @Named(NetworkModule.API_CACHE_NAME)
     String provideApiCacheName() {
         return "http";
@@ -36,7 +37,7 @@ public class ConfigModule {
 
     @Provides
     @Singleton
-    @Named(NetworkModule.API_CACHE_SIZE)
+    @Named(NetworkModule.API_CACHE_SIZE_IN_BYTES)
     long provideApiCacheSizeMegaBytes() {
         return 50 * 1024 * 1024; // 50MB
     }
@@ -44,15 +45,24 @@ public class ConfigModule {
     // Images Configuration //
 
     @Provides
+    @Singleton
     @Named(NetworkModule.IMAGES_CACHE_NAME)
     String provideImagesCacheName() {
         return "images";
     }
 
     @Provides
-    @Named(NetworkModule.IMAGES_CACHE_SIZE)
+    @Singleton
+    @Named(NetworkModule.IMAGES_CACHE_SIZE_IN_BYTES)
     long provideImagesCacheSizeMegaBytes() {
         return 10 * 1024 * 1024; // 10MB
+    }
+
+    @Provides
+    @Singleton
+    @Named(InterceptorModule.BANDWIDTH_LIMIT_IN_BYTES)
+    long provideBandwidthLimitInBytes() {
+        return 200 * 1024; // 200KB
     }
 
 }

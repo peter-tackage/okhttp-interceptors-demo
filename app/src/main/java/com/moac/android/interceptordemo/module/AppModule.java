@@ -1,4 +1,4 @@
-package com.moac.android.interceptordemo.injection.module;
+package com.moac.android.interceptordemo.module;
 
 import android.app.Application;
 import android.content.Context;
