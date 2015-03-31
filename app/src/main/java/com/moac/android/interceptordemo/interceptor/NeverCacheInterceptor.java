@@ -11,8 +11,9 @@ import java.io.IOException;
  */
 public class NeverCacheInterceptor implements Interceptor {
 
+    protected static final String CACHE_CONTROL_HEADER = "Cache-Control";
+
     private static final String IF_MODIFIED_SINCE_HEADER = "If-Modified-Since";
-    private static final String CACHE_CONTROL_HEADER = "Cache-Control";
     private static final String ETAG_HEADER = "Etag";
     private static final String LAST_MODIFIED_HEADER = "Last-Modified";
 

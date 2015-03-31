@@ -13,7 +13,7 @@ public class AssertNoCacheInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Response response = chain.proceed(chain.request());
-        if (response.header("Cache-Control") != null) {
+        if (response.header(NeverCacheInterceptor.CACHE_CONTROL_HEADER) != null) {
             throw new IllegalStateException("Expected an empty cache header");
         }
         return response;

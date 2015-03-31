@@ -7,6 +7,9 @@ import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 
+/*
+ * FIXME This doesn't accurately measure the bandwidth
+ */
 public class BandwidthLimitingInterceptor implements Interceptor {
 
     private static final String TAG = BandwidthLimitingInterceptor.class.getSimpleName();

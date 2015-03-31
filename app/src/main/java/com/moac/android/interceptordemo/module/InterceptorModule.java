@@ -1,7 +1,6 @@
 package com.moac.android.interceptordemo.module;
 
 import com.facebook.stetho.okhttp.StethoInterceptor;
-import com.moac.android.interceptordemo.interceptor.AssertNoCacheInterceptor;
 import com.moac.android.interceptordemo.interceptor.BandwidthLimitingInterceptor;
 import com.moac.android.interceptordemo.interceptor.LoggingInterceptor;
 import com.moac.android.interceptordemo.interceptor.NeverCacheInterceptor;
@@ -30,18 +29,16 @@ public class InterceptorModule {
         // Comment/uncomment to experiment
         ArrayList<Interceptor> appInterceptors = new ArrayList<>();
         appInterceptors.add(new LoggingInterceptor("HTTP|SoundCloud"));
-      //  appInterceptors.add(new AssertNoCacheInterceptor());
+        //  appInterceptors.add(new AssertNoCacheInterceptor());
         return appInterceptors;
     }
 
     @Provides
     @NetworkModule.NetworkInterceptors
-    List<Interceptor> provideNetworkInterceptors(BandwidthLimitingInterceptor bandwidthLimitingInterceptor,
-                                                 StethoInterceptor stethoInterceptor) {
+    List<Interceptor> provideNetworkInterceptors(StethoInterceptor stethoInterceptor) {
         // Comment/uncomment to experiment
         ArrayList<Interceptor> networkInterceptors = new ArrayList<>();
-        networkInterceptors.add(bandwidthLimitingInterceptor);
-     //   networkInterceptors.add(new AssertNoCacheInterceptor());
+        //   networkInterceptors.add(new AssertNoCacheInterceptor());
         networkInterceptors.add(stethoInterceptor);
         networkInterceptors.add(new NeverCacheInterceptor());
         return networkInterceptors;
@@ -55,7 +52,8 @@ public class InterceptorModule {
     }
 
     @Provides
-    @Singleton // enforce limit for all OkHttp clients
+    @Singleton
+        // enforce limit for all OkHttp clients
     BandwidthLimitingInterceptor provideBandwidthLimitingInterceptor(@Named(BANDWIDTH_LIMIT_IN_BYTES) long bandwidthLimitInBytes) {
         return new BandwidthLimitingInterceptor(bandwidthLimitInBytes);
     }
