@@ -29,26 +29,8 @@ public class TracksViewModelProvider {
     private PublishSubject<List<Track>> mBridgeModel;
 
     public TracksViewModelProvider() {
-        mModel = PublishSubject.create();
-        mBridgeModel = PublishSubject.create();
+        initSubjects();
         bindBridge();
-    }
-
-    private void bindBridge() {
-        mBridgeModel
-                .flatMap(new Func1<List<Track>, Observable<List<TrackViewModel>>>() {
-                    @Override
-                    public Observable<List<TrackViewModel>> call(List<Track> tracks) {
-                        List<TrackViewModel> tvmList = new ArrayList<>();
-                        for (Track track : tracks) {
-                            tvmList.add(new TrackViewModel(track.getId(),
-                                    track.getTitle(),
-                                    track.getUser().getUsername(),
-                                    convertToHighResUrl(track.getArtworkUrl()), 0, ""));
-                        }
-                        return Observable.just(tvmList);
-                    }
-                }).subscribe(new ElementObserver<>(mModel));
     }
 
     public Observable<TrackViewModel> getObservableViewModel(final long period, final TimeUnit timeUnit) {
@@ -77,6 +59,28 @@ public class TracksViewModelProvider {
 
     public Observer<List<Track>> asDestination() {
         return mBridgeModel;
+    }
+
+    private void initSubjects() {
+        mModel = PublishSubject.create();
+        mBridgeModel = PublishSubject.create();
+    }
+
+    private void bindBridge() {
+        mBridgeModel
+                .flatMap(new Func1<List<Track>, Observable<List<TrackViewModel>>>() {
+                    @Override
+                    public Observable<List<TrackViewModel>> call(List<Track> tracks) {
+                        List<TrackViewModel> tvmList = new ArrayList<>();
+                        for (Track track : tracks) {
+                            tvmList.add(new TrackViewModel(track.getId(),
+                                    track.getTitle(),
+                                    track.getUser().getUsername(),
+                                    convertToHighResUrl(track.getArtworkUrl()), 0, ""));
+                        }
+                        return Observable.just(tvmList);
+                    }
+                }).subscribe(new ElementObserver<>(mModel));
     }
 
     private static String convertToHighResUrl(String imageUrl) {

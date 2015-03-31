@@ -56,6 +56,8 @@ public class DisplayFragment extends InjectingFragment {
     private Observable<String> mGenre = Observable.just("ambient");
     private Observable<Long> mLimit = Observable.just(15l); // fetch 15 tracks
 
+    private TrackFetcher mTrackFetcher;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_display, container, false);
@@ -94,19 +96,20 @@ public class DisplayFragment extends InjectingFragment {
                         });
 
 
+        // Configure Track Fetcher
+        mTrackFetcher = new TrackFetcher(mTracksProvider,
+                mViewModelProvider.asDestination(),
+                new SimpleObserver<List<Track>>() {
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(getActivity(), "Error - " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                },
+                mGenre,
+                mLimit, "DisplayFragment|Fetcher"
+        );
         // Fetch a new set of tracks every 20 seconds
-        mFetchScheduler.start(20, TimeUnit.SECONDS,
-                new TrackFetcher(mTracksProvider,
-                        mViewModelProvider.asDestination(),
-                        new SimpleObserver<List<Track>>() {
-                            @Override
-                            public void onError(Throwable e) {
-                                Toast.makeText(getActivity(), "Error - " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        },
-                        mGenre,
-                        mLimit, "DisplayFragment|Fetcher"
-                ));
+        mFetchScheduler.start(20, TimeUnit.SECONDS, mTrackFetcher);
 
     }
 
@@ -114,6 +117,7 @@ public class DisplayFragment extends InjectingFragment {
     public void onStop() {
         super.onStop();
         mViewModelSubscription.unsubscribe();
+        mTrackFetcher.cancelFetch(); // cancel inflight
         mFetchScheduler.stop();
         // TODO Stop fetcher
     }

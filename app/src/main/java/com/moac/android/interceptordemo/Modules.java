@@ -22,7 +22,6 @@ public class Modules {
         };
     }
 
-
     private Modules() {
         // No instances.
     }

@@ -12,9 +12,6 @@ public class FetchScheduler {
 
     private Subscription mSubscription;
 
-    public FetchScheduler() {
-    }
-
     public void start(long period, TimeUnit timeUnit, final TrackFetcher trackFetcher) {
         safeUnsubscribe(mSubscription);
         mSubscription = Observable.timer(0, period, timeUnit)

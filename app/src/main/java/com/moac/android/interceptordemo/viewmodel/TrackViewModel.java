@@ -1,6 +1,7 @@
 package com.moac.android.interceptordemo.viewmodel;
 
 public class TrackViewModel {
+
     private final long mId;
     private final String mTitle;
     private final String mArtist;
@@ -9,12 +10,12 @@ public class TrackViewModel {
     private final String mDuration;
 
     public TrackViewModel(long id, String title, String artist, String imageUrl, long playCount, String duration) {
-        this.mId = id;
-        this.mTitle = title;
-        this.mArtist = artist;
-        this.mArtworkUrl = imageUrl;
-        this.mPlayCount = playCount;
-        this.mDuration = duration;
+        mId = id;
+        mTitle = title;
+        mArtist = artist;
+        mArtworkUrl = imageUrl;
+        mPlayCount = playCount;
+        mDuration = duration;
     }
 
     public long getId() {

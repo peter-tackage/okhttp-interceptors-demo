@@ -32,12 +32,12 @@ public class TrackFetcher {
 
     public TrackFetcher(TracksProvider tracksProvider, Observer<List<Track>> destination, Observer<List<Track>> fetchObserver,
                         Observable<String> genre, Observable<Long> limit, String logTag) {
-        this.mTracksProvider = tracksProvider;
-        this.mDestination = destination;
-        this.mFetchObserver = fetchObserver;
-        this.mGenre = genre;
-        this.mLimit = limit;
-        this.mLogTag = logTag;
+        mTracksProvider = tracksProvider;
+        mDestination = destination;
+        mFetchObserver = fetchObserver;
+        mGenre = genre;
+        mLimit = limit;
+        mLogTag = logTag;
     }
 
     public void fetch() {
@@ -67,8 +67,8 @@ public class TrackFetcher {
         Long mLimit;
 
         private RequestData(String genre, Long limit) {
-            this.mGenre = genre;
-            this.mLimit = limit;
+            mGenre = genre;
+            mLimit = limit;
         }
     }
 
