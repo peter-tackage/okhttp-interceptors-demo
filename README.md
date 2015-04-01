@@ -1,9 +1,10 @@
 okhttp-interceptor-demo
 =======================
 
-Note: To run this app, you will require your own SoundCloud API key.
+This app was used to demonstrate the use of OkHttp Interceptors and Facebook's Stetho library during
+ my talk given as a part of the Futurice Android meetup in Helsinki on 12th March 2015.
 
-This is an app to demonstrate the use of OkHttp Interceptors and Facebook's Stetho library.
+Note: To run this app, you will require your own SoundCloud API key.
 
 It also uses RxJava, Dagger, Retrofit and Picasso.
 
