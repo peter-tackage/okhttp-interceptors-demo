@@ -29,6 +29,7 @@ The Interceptors in use are defined in the InterceptorModule class, with the reg
 The ConfigModule provides a range of named configuration parameters required by the other modules. This makes the Module act like a properties file.
 
 **Screenshots**
+
 ![An example screenshot](https://github.com/peter-tackage/assets/raw/master/screenshots/okhttp-interceptor-demo/Screenshot_2015-03-31-23-07-20.png)
 
 License
