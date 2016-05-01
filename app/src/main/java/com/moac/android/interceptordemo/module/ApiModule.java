@@ -24,8 +24,6 @@ import retrofit.converter.GsonConverter;
 @Module(complete = false, library = true)
 public class ApiModule {
 
-    private static final String TAG = ApiModule.class.getSimpleName();
-
     // Required configuration settings definitions //
 
     static final String API_CLIENT_ID = "ApiClientId";

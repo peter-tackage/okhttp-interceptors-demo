@@ -1,11 +1,11 @@
 package com.moac.android.interceptordemo.module;
 
-import android.content.Context;
-import android.util.Log;
-
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.OkHttpClient;
+
+import android.content.Context;
+import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,24 +35,24 @@ public class NetworkModule {
 
     @Qualifier
     @Retention(RUNTIME)
-    public static @interface AppInterceptors {
+    public @interface AppInterceptors {
     }
 
     @Qualifier
     @Retention(RUNTIME)
-    public static @interface NetworkInterceptors {
+    public @interface NetworkInterceptors {
     }
 
     // Scopes //
 
     @Qualifier
     @Retention(RUNTIME)
-    public static @interface Api {
+    public @interface Api {
     }
 
     @Qualifier
     @Retention(RUNTIME)
-    public static @interface Images {
+    public @interface Images {
     }
 
     // Injection Providers //
@@ -95,16 +95,11 @@ public class NetworkModule {
 
     // Static Helpers //
 
-    private static Cache createCache(Context context, String cacheDirName, long cacheSizeMegaBytes) {
-        try {
-            // Create and set HTTP cache in the application cache directory.
-            File cacheDir = new File(context.getCacheDir(), cacheDirName);
-            return new Cache(cacheDir, cacheSizeMegaBytes);
-        } catch (IOException e) {
-            Log.e(TAG, "Unable to install disk cache.", e);
-            // Don't throw if unable to set cache
-            return null;
-        }
+    private static Cache createCache(Context context, String cacheDirName,
+                                     long cacheSizeMegaBytes) {
+        // Create and set HTTP cache in the application cache directory.
+        File cacheDir = new File(context.getCacheDir(), cacheDirName);
+        return new Cache(cacheDir, cacheSizeMegaBytes);
     }
 
     private static OkHttpClient createOkHttpClient(Cache cache,
@@ -119,7 +114,7 @@ public class NetworkModule {
         try {
             client.getCache().evictAll();
         } catch (IOException ioe) {
-           Log.w(TAG, "Error evicting all from cache", ioe);
+            Log.w(TAG, "Error evicting all from cache", ioe);
         }
 
         // Install interceptors

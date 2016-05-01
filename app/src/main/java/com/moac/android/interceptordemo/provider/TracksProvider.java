@@ -22,12 +22,6 @@ public class TracksProvider {
 
     public Observable<List<Track>> getObservable(final String genre, final long limit) {
         return mSoundCloudApi.getTracks(genre, limit);
-//                .doOnError(new Action1<Throwable>() {
-//                    @Override
-//                    public void call(Throwable throwable) {
-//                        mApiErrorHandler.report(throwable);
-//                    }
-//                });
     }
 
 }
