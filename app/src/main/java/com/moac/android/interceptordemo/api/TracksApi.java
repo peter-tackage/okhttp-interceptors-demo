@@ -1,6 +1,5 @@
-package com.moac.android.interceptordemo.provider;
+package com.moac.android.interceptordemo.api;
 
-import com.moac.android.interceptordemo.api.SoundCloudApi;
 import com.moac.android.interceptordemo.api.model.Track;
 
 import android.support.annotation.NonNull;

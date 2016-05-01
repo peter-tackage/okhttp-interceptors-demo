@@ -24,7 +24,7 @@ public class TrackDataModel {
 
     }
 
-    public Observable<List<Track>> getTracks() {
+    public Observable<List<Track>> getTracksOnceAndStream() {
         return mTracks;
     }
 }

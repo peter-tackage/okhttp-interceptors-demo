@@ -33,6 +33,12 @@ public class FetchScheduler {
 
     public void stop() {
         mTrackFetcher.cancelFetch();
+        mSubscription = renew();
+    }
+
+    @NonNull
+    private SerialSubscription renew() {
         safeUnsubscribe(mSubscription);
+        return new SerialSubscription();
     }
 }

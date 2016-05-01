@@ -1,9 +1,9 @@
 package com.moac.android.interceptordemo.fragment;
 
 import com.moac.android.interceptordemo.R;
+import com.moac.android.interceptordemo.api.TracksApi;
 import com.moac.android.interceptordemo.fetch.FetchScheduler;
 import com.moac.android.interceptordemo.injection.InjectingFragment;
-import com.moac.android.interceptordemo.provider.TracksApi;
 import com.moac.android.interceptordemo.viewmodel.TrackData;
 import com.moac.android.interceptordemo.viewmodel.TracksViewModel;
 import com.squareup.picasso.Picasso;
@@ -21,9 +21,8 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
+import rx.subscriptions.CompositeSubscription;
 
 public class DisplayFragment extends InjectingFragment {
 
@@ -41,7 +40,7 @@ public class DisplayFragment extends InjectingFragment {
     @Inject
     TracksApi mTracksApi;
 
-    private Subscription mViewModelSubscription;
+    private CompositeSubscription mViewModelSubscription;
     private TextView mArtistTextView;
     private TextView mTitleTextView;
     private ImageView mTrackImageView;
@@ -60,36 +59,40 @@ public class DisplayFragment extends InjectingFragment {
     @Override
     public void onStart() {
         super.onStart();
-        mViewModelSubscription =
-                mViewModelProvider.getObservableViewModel(5, TimeUnit.SECONDS)
-                                  .observeOn(AndroidSchedulers.mainThread())
-                                  .subscribe(renderTrack(),
-                                             throwable -> Log.e(TAG,
-                                                                "ViewModelProvider Observable errored!",
-                                                                throwable),
-                                             () -> Log.w(TAG,
-                                                         "ViewModelProvider Observable completed!"));
+        mViewModelSubscription = new CompositeSubscription();
+
+        // Update the displayed track every 5 seconds
+        mViewModelSubscription.add(mViewModelProvider.getTrackDataStream(5, TimeUnit.SECONDS)
+                                                     .observeOn(AndroidSchedulers.mainThread())
+                                                     .subscribe(this::renderTrack,
+                                                                DisplayFragment::logError,
+                                                                DisplayFragment::logCompleted));
 
         // Fetch a new set of tracks every 20 seconds
         mFetchScheduler.start(20, TimeUnit.SECONDS);
-
-    }
-
-    @NonNull
-    private Action1<TrackData> renderTrack() {
-        return trackData -> {
-            Log.i(TAG, "Rendering new track: " + trackData);
-            mPicasso.load(trackData.getArtworkUrl())
-                    .into(mTrackImageView);
-            mArtistTextView.setText(trackData.getArtist());
-            mTitleTextView.setText(trackData.getTitle());
-        };
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        mViewModelSubscription.unsubscribe();
+        mViewModelSubscription.clear();
         mFetchScheduler.stop();
     }
+
+    private void renderTrack(@NonNull final TrackData trackData) {
+        Log.i(TAG, "Rendering new track: " + trackData);
+        mPicasso.load(trackData.getArtworkUrl())
+                .into(mTrackImageView);
+        mArtistTextView.setText(trackData.getArtist());
+        mTitleTextView.setText(trackData.getTitle());
+    }
+
+    private static int logCompleted() {
+        return Log.w(TAG, "ViewModelProvider Observable completed!");
+    }
+
+    private static int logError(final Throwable throwable) {
+        return Log.e(TAG, "ViewModelProvider Observable errored!", throwable);
+    }
+
 }

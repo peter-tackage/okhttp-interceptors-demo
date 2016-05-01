@@ -1,7 +1,7 @@
 package com.moac.android.interceptordemo.fetch;
 
 import com.moac.android.interceptordemo.TrackDataModel;
-import com.moac.android.interceptordemo.provider.TracksApi;
+import com.moac.android.interceptordemo.api.TracksApi;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;

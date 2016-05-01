@@ -2,7 +2,6 @@ package com.moac.android.interceptordemo.viewmodel;
 
 import com.moac.android.interceptordemo.TrackDataModel;
 import com.moac.android.interceptordemo.api.model.Track;
-import com.moac.android.interceptordemo.rx.Functional;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -11,6 +10,8 @@ import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.functions.Func1;
+
+import static com.moac.android.interceptordemo.rx.Functional.selectLeft;
 
 public final class TracksViewModel {
 
@@ -22,17 +23,18 @@ public final class TracksViewModel {
     }
 
     @NonNull
-    public Observable<TrackData> getObservableViewModel(final long period,
-                                                        @NonNull final TimeUnit timeUnit) {
-        return mTrackDataModel.getTracks()
+    public Observable<TrackData> getTrackDataStream(final long displayInterval,
+                                                    @NonNull final TimeUnit timeUnit) {
+        return mTrackDataModel.getTracksOnceAndStream()
                               .switchMap(tracks -> Observable.from(tracks)
                                                              .filter(removeNoArtwork())
                                                              .map(this::toTrackData))
                               .toList()
                               .switchMap(tracks -> Observable.from(tracks)
-                                                             .zipWith(Observable.interval(0, period,
+                                                             .zipWith(Observable.interval(0,
+                                                                                          displayInterval,
                                                                                           timeUnit),
-                                                                      Functional.selectLeft())
+                                                                      selectLeft())
                                                              .repeat());
     }
 
