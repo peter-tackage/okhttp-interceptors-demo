@@ -1,12 +1,14 @@
 package com.moac.android.interceptordemo.module;
 
-import android.app.Activity;
-import android.content.Context;
-
+import com.moac.android.interceptordemo.TrackDataModel;
 import com.moac.android.interceptordemo.activity.MainActivity;
 import com.moac.android.interceptordemo.fragment.DisplayFragment;
 import com.moac.android.interceptordemo.viewmodel.FetchScheduler;
-import com.moac.android.interceptordemo.viewmodel.TracksViewModelProvider;
+import com.moac.android.interceptordemo.viewmodel.TrackFetcher;
+import com.moac.android.interceptordemo.viewmodel.TracksViewModel;
+
+import android.app.Activity;
+import android.content.Context;
 
 import java.lang.annotation.Retention;
 
@@ -48,14 +50,14 @@ public class UiModule {
 
     @Provides
     @Singleton
-    TracksViewModelProvider provideTracksViewModelProvider() {
-        return new TracksViewModelProvider();
+    TracksViewModel provideTracksViewModel(TrackDataModel trackDataModel) {
+        return new TracksViewModel(trackDataModel);
     }
 
     @Provides
     @Singleton
-    FetchScheduler provideFetchScheduler() {
-        return new FetchScheduler();
+    FetchScheduler provideFetchScheduler(TrackFetcher trackFetcher) {
+        return new FetchScheduler(trackFetcher);
     }
 
 }

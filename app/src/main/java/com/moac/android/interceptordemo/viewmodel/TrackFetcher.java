@@ -1,16 +1,16 @@
 package com.moac.android.interceptordemo.viewmodel;
 
-import com.moac.android.interceptordemo.api.model.Track;
-import com.moac.android.interceptordemo.provider.TracksProvider;
-import com.moac.android.interceptordemo.rx.LoggingObserver;
+import com.moac.android.interceptordemo.TrackDataModel;
+import com.moac.android.interceptordemo.provider.TracksApi;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
-import java.util.List;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import rx.Observable;
-import rx.Observer;
 import rx.Subscription;
 
 import static com.moac.android.interceptordemo.rx.RxUtils.safeUnsubscribe;
@@ -18,50 +18,45 @@ import static com.moac.android.interceptordemo.rx.RxUtils.safeUnsubscribe;
 /*
  * Transactional Fetcher
  */
+@Singleton
 public class TrackFetcher {
 
+    private static final String TAG = TrackFetcher.class.getSimpleName();
+
     @NonNull
-    private final TracksProvider mTracksProvider;
+    private final TracksApi mTracksApi;
+
     @NonNull
-    private final Observer<List<Track>> mDestination;
+    private final TrackDataModel mTrackDataModel;
+
     @NonNull
-    private final Observer<List<Track>> mFetchObserver;
-    @NonNull
-    private final Observable<String> mGenre;
-    @NonNull
-    private final Observable<Long> mLimit;
-    @NonNull
-    private final String mLogTag;
+    private final FetchConfiguration mFetchConfiguration;
 
     @Nullable
     private Subscription mFetchSubscription;
 
-    public TrackFetcher(@NonNull final TracksProvider tracksProvider,
-                        @NonNull final Observer<List<Track>> destination,
-                        @NonNull final Observer<List<Track>> fetchObserver,
-                        @NonNull final Observable<String> genre,
-                        @NonNull final Observable<Long> limit,
-                        @NonNull final String logTag) {
-        mTracksProvider = tracksProvider;
-        mDestination = destination;
-        mFetchObserver = fetchObserver;
-        mGenre = genre;
-        mLimit = limit;
-        mLogTag = logTag;
+    @Inject
+    public TrackFetcher(@NonNull final TracksApi tracksApi,
+                        @NonNull final TrackDataModel trackDataModel,
+                        @NonNull final FetchConfiguration fetchConfiguration) {
+        mTracksApi = tracksApi;
+        mTrackDataModel = trackDataModel;
+        mFetchConfiguration = fetchConfiguration;
     }
 
     public void fetch() {
-        mFetchSubscription = ViewModels.fetchInto(
-                Observable.combineLatest(mGenre, mLimit, FetchRequest::create)
-                          .flatMap(request -> mTracksProvider
-                                  .getTrackList(request.genre(), request.limit())
-                                  .toObservable()),
-                mDestination,
-                new LoggingObserver<>(mLogTag, mFetchObserver));
+        mFetchSubscription = Observable.combineLatest(mFetchConfiguration.getGenre(),
+                                                      mFetchConfiguration.getLimit(),
+                                                      FetchRequest::create)
+                                       .switchMap(
+                                               request -> mTracksApi.getTrackList(request.genre(),
+                                                                                  request.limit())
+                                                                    .toObservable())
+                                       .subscribe(mTrackDataModel::set,
+                                                  e -> Log.e(TAG, "Error Fetching Tracks", e));
     }
 
     public void cancelFetch() {
         safeUnsubscribe(mFetchSubscription);
     }
-
 }

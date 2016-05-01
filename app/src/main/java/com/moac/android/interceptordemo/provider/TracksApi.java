@@ -13,13 +13,13 @@ import javax.inject.Singleton;
 import rx.Single;
 
 @Singleton
-public class TracksProvider {
+public class TracksApi {
 
     @NonNull
     private final SoundCloudApi mSoundCloudApi;
 
     @Inject
-    public TracksProvider(@NonNull final SoundCloudApi soundCloudApi) {
+    public TracksApi(@NonNull final SoundCloudApi soundCloudApi) {
         mSoundCloudApi = soundCloudApi;
     }
 
