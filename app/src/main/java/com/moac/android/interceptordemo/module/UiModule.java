@@ -2,9 +2,9 @@ package com.moac.android.interceptordemo.module;
 
 import com.moac.android.interceptordemo.TrackDataModel;
 import com.moac.android.interceptordemo.activity.MainActivity;
+import com.moac.android.interceptordemo.fetch.FetchScheduler;
+import com.moac.android.interceptordemo.fetch.TrackFetcher;
 import com.moac.android.interceptordemo.fragment.DisplayFragment;
-import com.moac.android.interceptordemo.viewmodel.FetchScheduler;
-import com.moac.android.interceptordemo.viewmodel.TrackFetcher;
 import com.moac.android.interceptordemo.viewmodel.TracksViewModel;
 
 import android.app.Activity;

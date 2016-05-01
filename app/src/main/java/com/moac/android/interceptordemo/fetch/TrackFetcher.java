@@ -1,4 +1,4 @@
-package com.moac.android.interceptordemo.viewmodel;
+package com.moac.android.interceptordemo.fetch;
 
 import com.moac.android.interceptordemo.TrackDataModel;
 import com.moac.android.interceptordemo.provider.TracksApi;

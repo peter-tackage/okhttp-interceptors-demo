@@ -4,24 +4,28 @@ import com.google.gson.annotations.SerializedName;
 
 public class Track {
 
-    @SerializedName("id") private long mId;
-    @SerializedName("title") private String mTitle;
-    @SerializedName("user") private User mUser;
-    @SerializedName("artwork_url") private String mArtworkUrl;
+    @SerializedName("id")
+    private long mId;
+    @SerializedName("title")
+    private String mTitle;
+    @SerializedName("user")
+    private User mUser;
+    @SerializedName("artwork_url")
+    private String mArtworkUrl;
 
-    public long getId() {
+    public long id() {
         return mId;
     }
 
-    public String getTitle() {
+    public String title() {
         return mTitle;
     }
 
-    public User getUser() {
+    public User user() {
         return mUser;
     }
 
-    public String getArtworkUrl() {
+    public String artworkUrl() {
         return mArtworkUrl;
     }
 }

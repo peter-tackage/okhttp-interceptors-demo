@@ -1,9 +1,9 @@
 package com.moac.android.interceptordemo.fragment;
 
 import com.moac.android.interceptordemo.R;
+import com.moac.android.interceptordemo.fetch.FetchScheduler;
 import com.moac.android.interceptordemo.injection.InjectingFragment;
 import com.moac.android.interceptordemo.provider.TracksApi;
-import com.moac.android.interceptordemo.viewmodel.FetchScheduler;
 import com.moac.android.interceptordemo.viewmodel.TrackData;
 import com.moac.android.interceptordemo.viewmodel.TracksViewModel;
 import com.squareup.picasso.Picasso;

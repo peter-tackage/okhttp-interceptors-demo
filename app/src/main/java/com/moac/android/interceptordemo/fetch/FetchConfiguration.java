@@ -1,4 +1,4 @@
-package com.moac.android.interceptordemo.viewmodel;
+package com.moac.android.interceptordemo.fetch;
 
 import android.support.annotation.NonNull;
 

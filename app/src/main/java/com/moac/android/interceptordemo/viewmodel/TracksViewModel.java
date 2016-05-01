@@ -32,21 +32,21 @@ public final class TracksViewModel {
                               .switchMap(tracks -> Observable.from(tracks)
                                                              .zipWith(Observable.interval(0, period,
                                                                                           timeUnit),
-                                                                      Functional.takeLeft())
+                                                                      Functional.selectLeft())
                                                              .repeat());
     }
 
     @NonNull
     private Func1<Track, Boolean> removeNoArtwork() {
-        return track -> !TextUtils.isEmpty(track.getArtworkUrl());
+        return track -> !TextUtils.isEmpty(track.artworkUrl());
     }
 
     @NonNull
     private TrackData toTrackData(@NonNull final Track track) {
-        return TrackData.create(track.getId(),
-                                track.getTitle(),
-                                track.getUser().getUsername(),
-                                convertToHighResUrl(track.getArtworkUrl()), 0, "");
+        return TrackData.create(track.id(),
+                                track.title(),
+                                track.user().username(),
+                                convertToHighResUrl(track.artworkUrl()), 0, "");
     }
 
     @NonNull
