@@ -43,7 +43,8 @@ public class TrackFetcher {
         mFetchSubscription = ViewModels.fetchInto(
                 Observable.combineLatest(mGenre, mLimit, RequestData::new)
                           .flatMap(request -> mTracksProvider
-                                  .getObservable(request.mGenre, request.mLimit)),
+                                  .getTrackList(request.mGenre, request.mLimit)
+                                  .toObservable()),
                 mDestination,
                 new LoggingObserver<>(mLogTag, mFetchObserver));
     }

@@ -1,54 +1,37 @@
 package com.moac.android.interceptordemo.viewmodel;
 
-public class TrackViewModel {
+import com.google.auto.value.AutoValue;
 
-    private final long mId;
-    private final String mTitle;
-    private final String mArtist;
-    private final String mArtworkUrl;
-    private final long mPlayCount;
-    private final String mDuration;
+import android.support.annotation.NonNull;
 
-    public TrackViewModel(long id, String title, String artist, String imageUrl, long playCount, String duration) {
-        mId = id;
-        mTitle = title;
-        mArtist = artist;
-        mArtworkUrl = imageUrl;
-        mPlayCount = playCount;
-        mDuration = duration;
-    }
+@AutoValue
+public abstract class TrackViewModel {
 
-    public long getId() {
-        return mId;
-    }
+    @NonNull
+    public abstract Long getId();
 
-    public String getTitle() {
-        return mTitle;
-    }
+    @NonNull
+    public abstract String getTitle();
 
-    public String getArtist() {
-        return mArtist;
-    }
+    @NonNull
+    public abstract String getArtist();
 
-    public String getArtworkUrl() {
-        return mArtworkUrl;
-    }
+    @NonNull
+    public abstract String getArtworkUrl();
 
-    public long getPlayCount() {
-        return mPlayCount;
-    }
+    @NonNull
+    public abstract Long getPlayCount();
 
-    public String getDuration() {
-        return mDuration;
-    }
+    @NonNull
+    public abstract String getDuration();
 
-    @Override
-    public String toString() {
-        return "TrackViewModel{" +
-                "mId=" + mId +
-                ", mTitle='" + mTitle + '\'' +
-                ", mArtist='" + mArtist + '\'' +
-                ", mArtworkUrl='" + mArtworkUrl +
-                '}';
+    @NonNull
+    public static TrackViewModel create(long id,
+                                        @NonNull String title,
+                                        @NonNull String artist,
+                                        @NonNull String imageUrl,
+                                        long playCount,
+                                        @NonNull String duration) {
+        return new AutoValue_TrackViewModel(id, title, artist, imageUrl, playCount, duration);
     }
 }

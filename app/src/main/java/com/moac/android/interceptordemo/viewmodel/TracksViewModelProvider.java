@@ -53,11 +53,11 @@ public class TracksViewModelProvider {
                 .flatMap(tracks -> {
                     List<TrackViewModel> tvmList = new ArrayList<>();
                     for (Track track : tracks) {
-                        tvmList.add(new TrackViewModel(track.getId(),
-                                                       track.getTitle(),
-                                                       track.getUser().getUsername(),
-                                                       convertToHighResUrl(
-                                                               track.getArtworkUrl()), 0, ""));
+                        tvmList.add(TrackViewModel.create(track.getId(),
+                                                          track.getTitle(),
+                                                          track.getUser().getUsername(),
+                                                          convertToHighResUrl(
+                                                                  track.getArtworkUrl()), 0, ""));
                     }
                     return Observable.just(tvmList);
                 }).subscribe(new ElementObserver<>(mModel));
@@ -77,7 +77,6 @@ public class TracksViewModelProvider {
         String extension = imageUrl.substring(imageUrl.lastIndexOf('.'));
 
         return fileWithoutSizeSuffix + HIGHRES_SIZE_SUFFIX + extension;
-
     }
 
 }

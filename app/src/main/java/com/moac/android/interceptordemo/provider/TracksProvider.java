@@ -8,7 +8,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import rx.Observable;
+import rx.Single;
 
 @Singleton
 public class TracksProvider {
@@ -20,7 +20,7 @@ public class TracksProvider {
         mSoundCloudApi = soundCloudApi;
     }
 
-    public Observable<List<Track>> getObservable(final String genre, final long limit) {
+    public Single<List<Track>> getTrackList(final String genre, final long limit) {
         return mSoundCloudApi.getTracks(genre, limit);
     }
 
