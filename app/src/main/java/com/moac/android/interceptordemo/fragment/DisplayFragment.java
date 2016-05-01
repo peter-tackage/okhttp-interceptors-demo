@@ -7,7 +7,6 @@ import com.moac.android.interceptordemo.provider.TracksProvider;
 import com.moac.android.interceptordemo.rx.SimpleObserver;
 import com.moac.android.interceptordemo.viewmodel.FetchScheduler;
 import com.moac.android.interceptordemo.viewmodel.TrackFetcher;
-import com.moac.android.interceptordemo.viewmodel.TrackViewModel;
 import com.moac.android.interceptordemo.viewmodel.TracksViewModelProvider;
 import com.squareup.picasso.Picasso;
 
@@ -28,8 +27,6 @@ import javax.inject.Inject;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.functions.Action1;
 
 public class DisplayFragment extends InjectingFragment {
 
@@ -74,27 +71,19 @@ public class DisplayFragment extends InjectingFragment {
         mViewModelSubscription =
                 mViewModelProvider.getObservableViewModel(5, TimeUnit.SECONDS)
                                   .observeOn(AndroidSchedulers.mainThread())
-                                  .subscribe(new Action1<TrackViewModel>() {
-                                      @Override
-                                      public void call(TrackViewModel trackViewModel) {
-                                          Log.i(TAG, "Rendering new track: " + trackViewModel);
-                                          mPicasso.load(trackViewModel.getArtworkUrl())
-                                                  .into(mTrackImageView);
-                                          mArtistTextView.setText(trackViewModel.getArtist());
-                                          mTitleTextView.setText(trackViewModel.getTitle());
-                                      }
-                                  }, new Action1<Throwable>() {
-                                      @Override
-                                      public void call(Throwable throwable) {
-                                          Log.e(TAG, "ViewModelProvider Observable errorred!",
-                                                throwable);
-                                      }
-                                  }, new Action0() {
-                                      @Override
-                                      public void call() {
-                                          Log.w(TAG, "ViewModelProvider Observable completed!");
-                                      }
-                                  });
+                                  .subscribe(trackViewModel -> {
+                                                 Log.i(TAG, "Rendering new track: " + trackViewModel);
+                                                 mPicasso.load(trackViewModel.getArtworkUrl())
+                                                         .into(mTrackImageView);
+                                                 mArtistTextView.setText(trackViewModel.getArtist());
+                                                 mTitleTextView.setText(trackViewModel.getTitle());
+                                             },
+                                             throwable -> Log
+                                                     .e(TAG,
+                                                        "ViewModelProvider Observable errorred!",
+                                                        throwable),
+                                             () -> Log.w(TAG,
+                                                         "ViewModelProvider Observable completed!"));
 
         // Configure Track Fetcher
         mTrackFetcher = new TrackFetcher(mTracksProvider,

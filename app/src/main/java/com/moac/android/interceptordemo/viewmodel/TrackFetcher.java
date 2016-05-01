@@ -9,8 +9,6 @@ import java.util.List;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
-import rx.functions.Func1;
-import rx.functions.Func2;
 
 import static com.moac.android.interceptordemo.rx.RxUtils.safeUnsubscribe;
 
@@ -30,7 +28,8 @@ public class TrackFetcher {
 
     private Subscription mFetchSubscription;
 
-    public TrackFetcher(TracksProvider tracksProvider, Observer<List<Track>> destination, Observer<List<Track>> fetchObserver,
+    public TrackFetcher(TracksProvider tracksProvider, Observer<List<Track>> destination,
+                        Observer<List<Track>> fetchObserver,
                         Observable<String> genre, Observable<Long> limit, String logTag) {
         mTracksProvider = tracksProvider;
         mDestination = destination;
@@ -42,18 +41,8 @@ public class TrackFetcher {
 
     public void fetch() {
         mFetchSubscription = ViewModels.fetchInto(
-                Observable.combineLatest(mGenre, mLimit, new Func2<String, Long, RequestData>() {
-                    @Override
-                    public RequestData call(String genre, Long limit) {
-                        return new RequestData(genre, limit);
-                    }
-                }).flatMap(new Func1<RequestData, Observable<List<Track>>>() {
-                    @Override
-                    public Observable<List<Track>> call(RequestData request) {
-                        return mTracksProvider.getObservable(request.mGenre, request.mLimit);
-
-                    }
-                }),
+                Observable.combineLatest(mGenre, mLimit, RequestData::new).flatMap(
+                        request -> mTracksProvider.getObservable(request.mGenre, request.mLimit)),
                 mDestination,
                 new LoggingObserver<>(mLogTag, mFetchObserver));
     }
@@ -63,6 +52,7 @@ public class TrackFetcher {
     }
 
     private static class RequestData {
+
         String mGenre;
         Long mLimit;
 

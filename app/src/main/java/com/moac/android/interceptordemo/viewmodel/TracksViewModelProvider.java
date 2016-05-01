@@ -12,8 +12,6 @@ import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.Observer;
-import rx.functions.Func1;
-import rx.functions.Func2;
 import rx.subjects.PublishSubject;
 
 /**
@@ -35,30 +33,14 @@ public class TracksViewModelProvider {
     public Observable<TrackViewModel> getObservableViewModel(final long period,
                                                              final TimeUnit timeUnit) {
         return mModel
-                .flatMap(new Func1<List<TrackViewModel>, Observable<TrackViewModel>>() {
-                    @Override
-                    public Observable<TrackViewModel> call(List<TrackViewModel> trackViewModels) {
-                        Log.i(TAG, "Producing new repeating sequence");
-                        return Observable.zip(Observable.from(trackViewModels)
-                                                        .filter(new Func1<TrackViewModel, Boolean>() {
-                                                            @Override
-                                                            public Boolean call(
-                                                                    TrackViewModel trackViewModel) {
-                                                                return !TextUtils.isEmpty(
-                                                                        trackViewModel
-                                                                                .getArtworkUrl());
-                                                            }
-                                                        }),
-                                              Observable.interval(period, timeUnit).startWith(0l),
-                                              new Func2<TrackViewModel, Long, TrackViewModel>() {
-                                                  @Override
-                                                  public TrackViewModel call(
-                                                          TrackViewModel trackViewModel,
-                                                          Long aLong) {
-                                                      return trackViewModel;
-                                                  }
-                                              }).repeat();
-                    }
+                .flatMap(trackViewModels -> {
+                    Log.i(TAG, "Producing new repeating sequence");
+                    return Observable.zip(Observable.from(trackViewModels)
+                                                    .filter(trackViewModel -> !TextUtils.isEmpty(
+                                                            trackViewModel
+                                                                    .getArtworkUrl())),
+                                          Observable.interval(period, timeUnit).startWith(0L),
+                                          (trackViewModel, __) -> trackViewModel).repeat();
                 });
     }
 
@@ -68,19 +50,16 @@ public class TracksViewModelProvider {
 
     private void bindBridge() {
         mBridgeModel
-                .flatMap(new Func1<List<Track>, Observable<List<TrackViewModel>>>() {
-                    @Override
-                    public Observable<List<TrackViewModel>> call(List<Track> tracks) {
-                        List<TrackViewModel> tvmList = new ArrayList<>();
-                        for (Track track : tracks) {
-                            tvmList.add(new TrackViewModel(track.getId(),
-                                                           track.getTitle(),
-                                                           track.getUser().getUsername(),
-                                                           convertToHighResUrl(
-                                                                   track.getArtworkUrl()), 0, ""));
-                        }
-                        return Observable.just(tvmList);
+                .flatMap(tracks -> {
+                    List<TrackViewModel> tvmList = new ArrayList<>();
+                    for (Track track : tracks) {
+                        tvmList.add(new TrackViewModel(track.getId(),
+                                                       track.getTitle(),
+                                                       track.getUser().getUsername(),
+                                                       convertToHighResUrl(
+                                                               track.getArtworkUrl()), 0, ""));
                     }
+                    return Observable.just(tvmList);
                 }).subscribe(new ElementObserver<>(mModel));
     }
 
