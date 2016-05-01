@@ -4,8 +4,8 @@ import com.moac.android.interceptordemo.api.model.Track;
 
 import java.util.List;
 
-import retrofit.http.GET;
-import retrofit.http.Query;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
 import rx.Observable;
 
 import static com.moac.android.interceptordemo.api.ApiConst.GENRES_QUERY_PARAM;

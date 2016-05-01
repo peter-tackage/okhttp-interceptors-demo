@@ -1,15 +1,15 @@
 package com.moac.android.interceptordemo.module;
 
-import android.content.Context;
-
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.picasso.OkHttpDownloader;
+import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
+
+import android.content.Context;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.OkHttpClient;
 
 @Module(complete = false, library = true)
 public class ImagesModule {
@@ -22,7 +22,7 @@ public class ImagesModule {
                            @NetworkModule.Images OkHttpClient okHttpClient) {
         return new Picasso.Builder(context)
                 .loggingEnabled(true)
-                .downloader(new OkHttpDownloader(okHttpClient))
+                .downloader(new OkHttp3Downloader(okHttpClient))
                 .build();
     }
 

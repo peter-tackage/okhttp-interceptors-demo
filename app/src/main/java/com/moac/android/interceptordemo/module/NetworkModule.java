@@ -1,9 +1,5 @@
 package com.moac.android.interceptordemo.module;
 
-import com.squareup.okhttp.Cache;
-import com.squareup.okhttp.Interceptor;
-import com.squareup.okhttp.OkHttpClient;
-
 import android.content.Context;
 import android.util.Log;
 
@@ -18,6 +14,9 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.Cache;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -105,21 +104,17 @@ public class NetworkModule {
     private static OkHttpClient createOkHttpClient(Cache cache,
                                                    List<Interceptor> appInterceptors,
                                                    List<Interceptor> networkInterceptors) {
-        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .cache(cache)
+                .build();
+//                .add(appInterceptors)
+//                .addNetworkInterceptor(networkInterceptors);
 
-        // If failed to create disk cache, still use OkHttp default internal cache
-        if (cache != null) {
-            client.setCache(cache);
-        }
         try {
-            client.getCache().evictAll();
+            client.cache().evictAll();
         } catch (IOException ioe) {
             Log.w(TAG, "Error evicting all from cache", ioe);
         }
-
-        // Install interceptors
-        client.interceptors().addAll(appInterceptors);
-        client.networkInterceptors().addAll(networkInterceptors);
 
         return client;
     }

@@ -1,9 +1,9 @@
 package com.moac.android.interceptordemo.interceptor;
 
-import com.squareup.okhttp.Interceptor;
-import com.squareup.okhttp.Response;
-
 import java.io.IOException;
+
+import okhttp3.Interceptor;
+import okhttp3.Response;
 
 /**
  * Throws an IllegalStateException if the response contains a Cache-Control header

@@ -1,10 +1,10 @@
 package com.moac.android.interceptordemo.interceptor;
 
-import com.squareup.okhttp.Interceptor;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-
 import java.io.IOException;
+
+import okhttp3.Interceptor;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Removes the Cache-Control and Etag control headers
@@ -24,15 +24,15 @@ public class NeverCacheInterceptor implements Interceptor {
         // when the content hasn't been modified. This means that we can't preview the JSON in Stetho.
         // Of course you would (probably) NEVER do this in production...
         Request modifiedRequest = chain.request().newBuilder()
-                .removeHeader(IF_MODIFIED_SINCE_HEADER).build();
+                                       .removeHeader(IF_MODIFIED_SINCE_HEADER).build();
 
         // Remove any response cache headers to prevent caching
         Response originalResponse = chain.proceed(modifiedRequest);
         return originalResponse.newBuilder()
-                .removeHeader(CACHE_CONTROL_HEADER)
-                .removeHeader(ETAG_HEADER)
-                .removeHeader(LAST_MODIFIED_HEADER)
-                .build();
+                               .removeHeader(CACHE_CONTROL_HEADER)
+                               .removeHeader(ETAG_HEADER)
+                               .removeHeader(LAST_MODIFIED_HEADER)
+                               .build();
 
     }
 }

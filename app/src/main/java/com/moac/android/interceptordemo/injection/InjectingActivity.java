@@ -1,13 +1,13 @@
 package com.moac.android.interceptordemo.injection;
 
-import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import dagger.ObjectGraph;
 
-public abstract class InjectingActivity extends Activity implements Injector {
+public abstract class InjectingActivity extends AppCompatActivity implements Injector {
 
     private ObjectGraph mObjectGraph;
 

@@ -1,10 +1,9 @@
 package com.moac.android.interceptordemo.module;
 
-import com.facebook.stetho.okhttp.StethoInterceptor;
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.moac.android.interceptordemo.interceptor.BandwidthLimitingInterceptor;
 import com.moac.android.interceptordemo.interceptor.LoggingInterceptor;
 import com.moac.android.interceptordemo.interceptor.NeverCacheInterceptor;
-import com.squareup.okhttp.Interceptor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +13,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.Interceptor;
 
 /*
  * Provides implementation of interceptors
@@ -47,14 +47,14 @@ public class InterceptorModule {
     @Provides
     @Singleton
     StethoInterceptor provideStethoInterceptor() {
-        // I think this MUST be a singleton. I've had trouble running with multiple instances
         return new StethoInterceptor();
     }
 
     @Provides
     @Singleton
-        // enforce limit for all OkHttp clients
-    BandwidthLimitingInterceptor provideBandwidthLimitingInterceptor(@Named(BANDWIDTH_LIMIT_IN_BYTES) long bandwidthLimitInBytes) {
+    BandwidthLimitingInterceptor provideBandwidthLimitingInterceptor(
+            @Named(BANDWIDTH_LIMIT_IN_BYTES) long bandwidthLimitInBytes) {
+        // enforces limit for all OkHttp clients
         return new BandwidthLimitingInterceptor(bandwidthLimitInBytes);
     }
 
