@@ -3,6 +3,8 @@ package com.moac.android.interceptordemo.viewmodel;
 import com.moac.android.interceptordemo.api.model.Track;
 import com.moac.android.interceptordemo.rx.ElementObserver;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -21,17 +23,19 @@ import rx.subjects.PublishSubject;
  */
 public class TracksViewModelProvider {
 
-    public static final String TAG = TracksViewModelProvider.class.getSimpleName();
+    private static final String TAG = TracksViewModelProvider.class.getSimpleName();
 
-    private PublishSubject<List<TrackViewModel>> mModel = PublishSubject.create();
-    private PublishSubject<List<Track>> mBridgeModel = PublishSubject.create();
+    @NonNull
+    private final PublishSubject<List<TrackViewModel>> mModel = PublishSubject.create();
+    @NonNull
+    private final PublishSubject<List<Track>> mBridgeModel = PublishSubject.create();
 
     public TracksViewModelProvider() {
         bindBridge();
     }
 
     public Observable<TrackViewModel> getObservableViewModel(final long period,
-                                                             final TimeUnit timeUnit) {
+                                                             @NonNull final TimeUnit timeUnit) {
         return mModel
                 .flatMap(trackViewModels -> {
                     Log.i(TAG, "Producing new repeating sequence");
@@ -63,7 +67,8 @@ public class TracksViewModelProvider {
                 }).subscribe(new ElementObserver<>(mModel));
     }
 
-    private static String convertToHighResUrl(String imageUrl) {
+    @Nullable
+    private static String convertToHighResUrl(@NonNull final String imageUrl) {
 
         if (TextUtils.isEmpty(imageUrl)) {
             return null;

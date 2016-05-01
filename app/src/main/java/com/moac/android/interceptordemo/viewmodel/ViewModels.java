@@ -7,7 +7,7 @@ import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
-public class ViewModels {
+public final class ViewModels {
 
     public static <T> Subscription fetchInto(Observable<T> source, final Observer<T> destination,
                                              LoggingObserver<T> fetchObserver) {

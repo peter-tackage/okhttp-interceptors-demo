@@ -3,6 +3,8 @@ package com.moac.android.interceptordemo.provider;
 import com.moac.android.interceptordemo.api.SoundCloudApi;
 import com.moac.android.interceptordemo.api.model.Track;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -13,14 +15,16 @@ import rx.Single;
 @Singleton
 public class TracksProvider {
 
+    @NonNull
     private final SoundCloudApi mSoundCloudApi;
 
     @Inject
-    public TracksProvider(SoundCloudApi soundCloudApi) {
+    public TracksProvider(@NonNull final SoundCloudApi soundCloudApi) {
         mSoundCloudApi = soundCloudApi;
     }
 
-    public Single<List<Track>> getTrackList(final String genre, final long limit) {
+    @NonNull
+    public Single<List<Track>> getTrackList(@NonNull final String genre, final long limit) {
         return mSoundCloudApi.getTracks(genre, limit);
     }
 

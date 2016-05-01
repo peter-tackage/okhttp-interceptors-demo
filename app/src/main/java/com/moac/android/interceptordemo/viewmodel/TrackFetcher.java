@@ -4,6 +4,9 @@ import com.moac.android.interceptordemo.api.model.Track;
 import com.moac.android.interceptordemo.provider.TracksProvider;
 import com.moac.android.interceptordemo.rx.LoggingObserver;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
 import java.util.List;
 
 import rx.Observable;
@@ -17,20 +20,28 @@ import static com.moac.android.interceptordemo.rx.RxUtils.safeUnsubscribe;
  */
 public class TrackFetcher {
 
+    @NonNull
     private final TracksProvider mTracksProvider;
+    @NonNull
     private final Observer<List<Track>> mDestination;
+    @NonNull
     private final Observer<List<Track>> mFetchObserver;
+    @NonNull
+    private final Observable<String> mGenre;
+    @NonNull
+    private final Observable<Long> mLimit;
+    @NonNull
     private final String mLogTag;
 
-    // Query fields
-    private final Observable<String> mGenre;
-    private final Observable<Long> mLimit;
-
+    @Nullable
     private Subscription mFetchSubscription;
 
-    public TrackFetcher(TracksProvider tracksProvider, Observer<List<Track>> destination,
-                        Observer<List<Track>> fetchObserver,
-                        Observable<String> genre, Observable<Long> limit, String logTag) {
+    public TrackFetcher(@NonNull final TracksProvider tracksProvider,
+                        @NonNull final Observer<List<Track>> destination,
+                        @NonNull final Observer<List<Track>> fetchObserver,
+                        @NonNull final Observable<String> genre,
+                        @NonNull final Observable<Long> limit,
+                        @NonNull final String logTag) {
         mTracksProvider = tracksProvider;
         mDestination = destination;
         mFetchObserver = fetchObserver;
@@ -41,9 +52,9 @@ public class TrackFetcher {
 
     public void fetch() {
         mFetchSubscription = ViewModels.fetchInto(
-                Observable.combineLatest(mGenre, mLimit, RequestData::new)
+                Observable.combineLatest(mGenre, mLimit, FetchRequest::create)
                           .flatMap(request -> mTracksProvider
-                                  .getTrackList(request.mGenre, request.mLimit)
+                                  .getTrackList(request.genre(), request.limit())
                                   .toObservable()),
                 mDestination,
                 new LoggingObserver<>(mLogTag, mFetchObserver));
@@ -51,17 +62,6 @@ public class TrackFetcher {
 
     public void cancelFetch() {
         safeUnsubscribe(mFetchSubscription);
-    }
-
-    private static class RequestData {
-
-        String mGenre;
-        Long mLimit;
-
-        private RequestData(String genre, Long limit) {
-            mGenre = genre;
-            mLimit = limit;
-        }
     }
 
 }
