@@ -15,12 +15,12 @@ public class FetchConfiguration {
     }
 
     @NonNull
-    public Observable<String> getGenre() {
+    public Observable<String> getGenreStream() {
         return Observable.just("ambient");
     }
 
     @NonNull
-    public Observable<Long> getLimit() {
+    public Observable<Long> getLimitStream() {
         return Observable.just(15L); // fetch 15 tracks
     }
 }

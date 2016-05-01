@@ -1,25 +1,31 @@
 package com.moac.android.interceptordemo.api.model;
 
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 
-public class User {
+import android.support.annotation.NonNull;
+
+@AutoValue
+public abstract class User {
 
     @SerializedName("id")
-    protected String mId;
+    public abstract String id();
+
     @SerializedName("username")
-    protected String mUsername;
+    public abstract String username();
+
     @SerializedName("uri")
-    protected String mUri;
+    public abstract String uri();
 
-    public String id() {
-        return mId;
+    @NonNull
+    public static TypeAdapter<User> typeAdapter(@NonNull final Gson gson) {
+        return new AutoValue_User.GsonTypeAdapter(gson);
     }
 
-    public String username() {
-        return mUsername;
-    }
-
-    public String uri() {
-        return mUri;
+    @NonNull
+    public static User create(String id, String username, String uri) {
+        return new AutoValue_User(id, username, uri);
     }
 }

@@ -1,6 +1,11 @@
 package com.moac.android.interceptordemo.module;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapterFactory;
+
 import com.moac.android.interceptordemo.api.SoundCloudApi;
+import com.moac.android.interceptordemo.api.model.AutoValueGsonTypeAdapterFactory;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -37,8 +42,20 @@ public class ApiModule {
 
     @Provides
     @Singleton
-    GsonConverterFactory provideGsonConverterFactory() {
-        return GsonConverterFactory.create();
+    TypeAdapterFactory provideAutoValueGsonTypeAdapterFactory() {
+        return new AutoValueGsonTypeAdapterFactory();
+    }
+
+    @Provides
+    @Singleton
+    Gson provideGson(TypeAdapterFactory typeAdapterFactory) {
+        return new GsonBuilder().registerTypeAdapterFactory(typeAdapterFactory).create();
+    }
+
+    @Provides
+    @Singleton
+    GsonConverterFactory provideGsonConverterFactory(Gson gson) {
+        return GsonConverterFactory.create(gson);
     }
 
     @Provides

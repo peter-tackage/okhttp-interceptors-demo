@@ -1,31 +1,34 @@
 package com.moac.android.interceptordemo.api.model;
 
+import com.google.auto.value.AutoValue;
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
 import com.google.gson.annotations.SerializedName;
 
-public class Track {
+import android.support.annotation.NonNull;
+
+@AutoValue
+public abstract class Track {
 
     @SerializedName("id")
-    private long mId;
+    public abstract long id();
+
     @SerializedName("title")
-    private String mTitle;
+    public abstract String title();
+
     @SerializedName("user")
-    private User mUser;
+    public abstract User user();
+
     @SerializedName("artwork_url")
-    private String mArtworkUrl;
+    public abstract String artworkUrl();
 
-    public long id() {
-        return mId;
+    @NonNull
+    public static TypeAdapter<Track> typeAdapter(@NonNull final Gson gson) {
+        return new AutoValue_Track.GsonTypeAdapter(gson);
     }
 
-    public String title() {
-        return mTitle;
-    }
-
-    public User user() {
-        return mUser;
-    }
-
-    public String artworkUrl() {
-        return mArtworkUrl;
+    @NonNull
+    public static Track create(long id, String title, User user, String artworkUrl) {
+        return new AutoValue_Track(id, title, user, artworkUrl);
     }
 }

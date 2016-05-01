@@ -45,8 +45,8 @@ public class TrackFetcher {
     }
 
     public void fetch() {
-        mFetchSubscription = Observable.combineLatest(mFetchConfiguration.getGenre(),
-                                                      mFetchConfiguration.getLimit(),
+        mFetchSubscription = Observable.combineLatest(mFetchConfiguration.getGenreStream(),
+                                                      mFetchConfiguration.getLimitStream(),
                                                       FetchRequest::create)
                                        .switchMap(
                                                request -> mTracksApi.getTrackList(request.genre(),
