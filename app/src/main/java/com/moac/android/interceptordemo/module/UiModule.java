@@ -5,6 +5,7 @@ import com.moac.android.interceptordemo.activity.MainActivity;
 import com.moac.android.interceptordemo.fetch.FetchScheduler;
 import com.moac.android.interceptordemo.fetch.TrackFetcher;
 import com.moac.android.interceptordemo.fragment.DisplayFragment;
+import com.moac.android.interceptordemo.rx.ISchedulerProvider;
 import com.moac.android.interceptordemo.viewmodel.TracksViewModel;
 
 import android.app.Activity;
@@ -56,8 +57,9 @@ public class UiModule {
 
     @Provides
     @Singleton
-    FetchScheduler provideFetchScheduler(TrackFetcher trackFetcher) {
-        return new FetchScheduler(trackFetcher);
+    FetchScheduler provideFetchScheduler(TrackFetcher trackFetcher,
+                                         ISchedulerProvider schedulerProvider) {
+        return new FetchScheduler(trackFetcher, schedulerProvider);
     }
 
 }
