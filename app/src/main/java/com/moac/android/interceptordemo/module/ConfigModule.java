@@ -18,7 +18,8 @@ public class ConfigModule {
     @Singleton
     @Named(ApiModule.API_CLIENT_ID)
     String provideClientId() {
-        throw new IllegalStateException("You need to provide your own SoundCloud API client id");
+        //throw new IllegalStateException("You need to provide your own SoundCloud API client id");
+        return "0a1157d1c838727363c4e01cdace18bc";
     }
 
     @Provides

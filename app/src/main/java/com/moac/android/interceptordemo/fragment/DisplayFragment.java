@@ -1,14 +1,5 @@
 package com.moac.android.interceptordemo.fragment;
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.moac.android.interceptordemo.R;
 import com.moac.android.interceptordemo.api.model.Track;
 import com.moac.android.interceptordemo.injection.InjectingFragment;
@@ -20,6 +11,15 @@ import com.moac.android.interceptordemo.viewmodel.TrackViewModel;
 import com.moac.android.interceptordemo.viewmodel.TracksViewModelProvider;
 import com.squareup.picasso.Picasso;
 
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -27,7 +27,7 @@ import javax.inject.Inject;
 
 import rx.Observable;
 import rx.Subscription;
-import rx.android.app.AppObservable;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Action1;
 
@@ -54,12 +54,13 @@ public class DisplayFragment extends InjectingFragment {
 
     // Configuration
     private Observable<String> mGenre = Observable.just("ambient");
-    private Observable<Long> mLimit = Observable.just(15l); // fetch 15 tracks
+    private Observable<Long> mLimit = Observable.just(15L); // fetch 15 tracks
 
     private TrackFetcher mTrackFetcher;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_display, container, false);
         mArtistTextView = (TextView) rootView.findViewById(R.id.textView_artist);
         mTitleTextView = (TextView) rootView.findViewById(R.id.textView_title);
@@ -71,42 +72,43 @@ public class DisplayFragment extends InjectingFragment {
     public void onStart() {
         super.onStart();
         mViewModelSubscription =
-                AppObservable.bindFragment(this,
-                        // Change displayed track every 5 seconds
-                        mViewModelProvider.getObservableViewModel(5, TimeUnit.SECONDS))
-                        .subscribe(new Action1<TrackViewModel>() {
-                            @Override
-                            public void call(TrackViewModel trackViewModel) {
-                                Log.i(TAG, "Rendering new track: " + trackViewModel);
-                                mPicasso.load(trackViewModel.getArtworkUrl())
-                                        .into(mTrackImageView);
-                                mArtistTextView.setText(trackViewModel.getArtist());
-                                mTitleTextView.setText(trackViewModel.getTitle());
-                            }
-                        }, new Action1<Throwable>() {
-                            @Override
-                            public void call(Throwable throwable) {
-                                Log.e(TAG, "ViewModelProvider Observable errorred!", throwable);
-                            }
-                        }, new Action0() {
-                            @Override
-                            public void call() {
-                                Log.w(TAG, "ViewModelProvider Observable completed!");
-                            }
-                        });
-
+                mViewModelProvider.getObservableViewModel(5, TimeUnit.SECONDS)
+                                  .observeOn(AndroidSchedulers.mainThread())
+                                  .subscribe(new Action1<TrackViewModel>() {
+                                      @Override
+                                      public void call(TrackViewModel trackViewModel) {
+                                          Log.i(TAG, "Rendering new track: " + trackViewModel);
+                                          mPicasso.load(trackViewModel.getArtworkUrl())
+                                                  .into(mTrackImageView);
+                                          mArtistTextView.setText(trackViewModel.getArtist());
+                                          mTitleTextView.setText(trackViewModel.getTitle());
+                                      }
+                                  }, new Action1<Throwable>() {
+                                      @Override
+                                      public void call(Throwable throwable) {
+                                          Log.e(TAG, "ViewModelProvider Observable errorred!",
+                                                throwable);
+                                      }
+                                  }, new Action0() {
+                                      @Override
+                                      public void call() {
+                                          Log.w(TAG, "ViewModelProvider Observable completed!");
+                                      }
+                                  });
 
         // Configure Track Fetcher
         mTrackFetcher = new TrackFetcher(mTracksProvider,
-                mViewModelProvider.asDestination(),
-                new SimpleObserver<List<Track>>() {
-                    @Override
-                    public void onError(Throwable e) {
-                        Toast.makeText(getActivity(), "Error - " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                },
-                mGenre,
-                mLimit, "DisplayFragment|Fetcher"
+                                         mViewModelProvider.asDestination(),
+                                         new SimpleObserver<List<Track>>() {
+                                             @Override
+                                             public void onError(Throwable e) {
+                                                 Toast.makeText(getActivity(),
+                                                                "Error - " + e.getMessage(),
+                                                                Toast.LENGTH_SHORT).show();
+                                             }
+                                         },
+                                         mGenre,
+                                         mLimit, "DisplayFragment|Fetcher"
         );
         // Fetch a new set of tracks every 20 seconds
         mFetchScheduler.start(20, TimeUnit.SECONDS, mTrackFetcher);
@@ -119,6 +121,5 @@ public class DisplayFragment extends InjectingFragment {
         mViewModelSubscription.unsubscribe();
         mTrackFetcher.cancelFetch(); // cancel inflight
         mFetchScheduler.stop();
-        // TODO Stop fetcher
     }
 }
