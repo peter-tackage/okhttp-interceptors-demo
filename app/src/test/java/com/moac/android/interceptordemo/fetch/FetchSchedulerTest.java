@@ -14,7 +14,7 @@ import rx.schedulers.TestScheduler;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-public class FetchSchedulerTest {
+public final class FetchSchedulerTest {
 
     @Mock
     private TrackFetcher mTrackFetcher;
@@ -43,6 +43,7 @@ public class FetchSchedulerTest {
     public void testStart_callsTrackFetchAgainAfterDelay() {
         int interval = 500;
         TimeUnit timeUnit = TimeUnit.DAYS;
+
         mFetchScheduler.start(interval, timeUnit);
         mTestScheduler.advanceTimeBy(interval, timeUnit);
         mTestScheduler.triggerActions();
