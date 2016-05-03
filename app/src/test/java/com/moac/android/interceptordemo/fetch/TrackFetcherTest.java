@@ -27,6 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -48,6 +49,15 @@ public class TrackFetcherTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+    }
+
+    @Test
+    public void testNoFetch_doesNotInvokesApi() {
+        new Arrangement().withSearchGenre("dummy")
+                         .withSearchLimit(123)
+                         .withEmptyApiResult();
+
+        verify(mTracksApi, never()).getTrackList(anyString(), anyLong());
     }
 
     @Test
@@ -76,13 +86,23 @@ public class TrackFetcherTest {
     }
 
     @Test
-    public void testCancelFetch_allowsRestart() {
+    public void testFetch_allowsRefetch_whenError() {
+        new Arrangement().withSearchGenre("dummy")
+                         .withSearchLimit(10)
+                         .withApiResult(Single.error(new Exception()))
+                         .withAction().fetch();
+
+        mTrackFetcher.fetch();
+
+        verify(mTracksApi, times(2)).getTrackList(anyString(), anyLong());
+    }
+
+    @Test
+    public void testCancelFetch_allowsRefetch() {
         new Arrangement().withSearchGenre("dummy")
                          .withSearchLimit(10)
                          .withApiResult(createTracks(5))
-                         .withAction()
-                         .fetch()
-                         .cancelFetch();
+                         .withAction().fetch().cancelFetch();
 
         mTrackFetcher.fetch();
 
@@ -98,8 +118,7 @@ public class TrackFetcherTest {
                          .withApiResult(Single.just(createTracks(5))
                                               .delay(2, TimeUnit.DAYS, testScheduler)
                                               .doOnUnsubscribe(unsubscribeLatch::countDown))
-                         .withAction()
-                         .fetch();
+                         .withAction().fetch();
 
         testScheduler.advanceTimeBy(1, TimeUnit.DAYS);
         assertThat(unsubscribeLatch.getCount()).isEqualTo(1);

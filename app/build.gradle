@@ -24,6 +24,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    testOptions {
+        // Non-ideal solution until Logging is abstracted from Android dependencies.
+        unitTests.returnDefaultValues = true
+    }
 }
 
 dependencies {
