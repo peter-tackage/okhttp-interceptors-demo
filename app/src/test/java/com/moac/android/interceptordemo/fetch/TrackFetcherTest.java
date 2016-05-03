@@ -134,7 +134,7 @@ public class TrackFetcherTest {
             return this;
         }
 
-        Arrangement withSearchLimits(final Observable<Long> limits) {
+        Arrangement withSearchLimits(@NonNull final Observable<Long> limits) {
             when(mFetchConfiguration.getLimitStream()).thenReturn(limits);
             return this;
         }
@@ -154,9 +154,7 @@ public class TrackFetcherTest {
         }
 
         Arrangement withApiResult(@NonNull final List<Track> trackResponse) {
-            when(mTracksApi.getTrackList(anyString(), anyLong()))
-                    .thenReturn(Single.just(trackResponse));
-            return this;
+            return withApiResult(Single.just(trackResponse));
         }
 
         Arrangement withEmptyApiResult() {
