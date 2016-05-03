@@ -3,7 +3,6 @@ package com.moac.android.interceptordemo.fetch;
 import com.moac.android.interceptordemo.TrackDataModel;
 import com.moac.android.interceptordemo.api.TracksApi;
 import com.moac.android.interceptordemo.api.model.Track;
-import com.moac.android.interceptordemo.api.model.User;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +12,6 @@ import org.mockito.MockitoAnnotations;
 
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -23,6 +21,7 @@ import rx.Observable;
 import rx.Single;
 import rx.schedulers.TestScheduler;
 
+import static com.moac.android.interceptordemo.test.TestDataProvider.createTracks;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
@@ -180,29 +179,4 @@ public class TrackFetcherTest {
         }
     }
 
-    private static List<Track> createTracks(final int count) {
-        ArrayList<Track> tracks = new ArrayList<>(count);
-        for (int i = 0; i < count; i++) {
-            tracks.add(dummyTrack(i));
-        }
-        return tracks;
-    }
-
-    @NonNull
-    private static Track dummyTrack(final int position) {
-        return Track.create(position,
-                            formatted("title", position),
-                            dummyUser(position),
-                            formatted("artworkUrl", position));
-    }
-
-    private static User dummyUser(final int position) {
-        return User.create(formatted("id", position),
-                           formatted("username", position),
-                           formatted("uri", position));
-    }
-
-    private static String formatted(@NonNull final String string, final int position) {
-        return String.format(string + "%d", position);
-    }
 }

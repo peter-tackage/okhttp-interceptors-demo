@@ -15,9 +15,6 @@ import rx.Subscription;
 
 import static com.moac.android.interceptordemo.rx.RxUtils.safeUnsubscribe;
 
-/*
- * Transactional Fetcher
- */
 @Singleton
 public class TrackFetcher {
 

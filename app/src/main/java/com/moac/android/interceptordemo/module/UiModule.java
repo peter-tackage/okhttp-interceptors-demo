@@ -51,8 +51,9 @@ public class UiModule {
 
     @Provides
     @Singleton
-    TracksViewModel provideTracksViewModel(TrackDataModel trackDataModel) {
-        return new TracksViewModel(trackDataModel);
+    TracksViewModel provideTracksViewModel(TrackDataModel trackDataModel,
+                                           ISchedulerProvider schedulerProvider) {
+        return new TracksViewModel(trackDataModel, schedulerProvider);
     }
 
     @Provides
