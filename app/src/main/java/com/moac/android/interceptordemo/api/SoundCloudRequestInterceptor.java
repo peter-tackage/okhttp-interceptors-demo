@@ -16,7 +16,7 @@ public class SoundCloudRequestInterceptor implements Interceptor {
 
     @Override
     public Response intercept(final Chain chain) throws IOException {
-        // Add client id to request
+        // Add client id to HTTP request
         Request request = chain.request()
                                .newBuilder()
                                .addHeader(ApiConst.CLIENT_ID_QUERY_PARAM, mClientId)

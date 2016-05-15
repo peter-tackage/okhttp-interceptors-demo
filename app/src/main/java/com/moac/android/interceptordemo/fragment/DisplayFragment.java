@@ -4,7 +4,7 @@ import com.moac.android.interceptordemo.R;
 import com.moac.android.interceptordemo.api.TracksApi;
 import com.moac.android.interceptordemo.fetch.FetchScheduler;
 import com.moac.android.interceptordemo.injection.InjectingFragment;
-import com.moac.android.interceptordemo.viewmodel.TrackData;
+import com.moac.android.interceptordemo.viewmodel.Track;
 import com.moac.android.interceptordemo.viewmodel.TracksViewModel;
 import com.squareup.picasso.Picasso;
 
@@ -79,12 +79,12 @@ public class DisplayFragment extends InjectingFragment {
         mFetchScheduler.stop();
     }
 
-    private void renderTrack(@NonNull final TrackData trackData) {
-        Log.i(TAG, "Rendering new track: " + trackData);
-        mPicasso.load(trackData.getArtworkUrl())
+    private void renderTrack(@NonNull final Track track) {
+        Log.i(TAG, "Rendering new track: " + track);
+        mPicasso.load(track.getArtworkUrl())
                 .into(mTrackImageView);
-        mArtistTextView.setText(trackData.getArtist());
-        mTitleTextView.setText(trackData.getTitle());
+        mArtistTextView.setText(track.getArtist());
+        mTitleTextView.setText(track.getTitle());
     }
 
     private static int logCompleted() {

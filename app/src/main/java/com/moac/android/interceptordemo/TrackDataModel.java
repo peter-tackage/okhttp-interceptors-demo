@@ -1,6 +1,6 @@
 package com.moac.android.interceptordemo;
 
-import com.moac.android.interceptordemo.api.model.Track;
+import com.moac.android.interceptordemo.viewmodel.Track;
 
 import android.support.annotation.NonNull;
 
@@ -27,4 +27,5 @@ public class TrackDataModel {
     public Observable<List<Track>> getTracksOnceAndStream() {
         return mTracks;
     }
+
 }

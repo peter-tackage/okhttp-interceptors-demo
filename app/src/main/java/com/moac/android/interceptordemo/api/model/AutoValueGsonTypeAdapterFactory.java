@@ -11,10 +11,10 @@ public class AutoValueGsonTypeAdapterFactory implements TypeAdapterFactory {
     @Override
     public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
         Class<? super T> rawType = type.getRawType();
-        if (rawType.equals(Track.class)) {
-            return (TypeAdapter<T>) Track.typeAdapter(gson);
-        } else if (rawType.equals(User.class)) {
-            return (TypeAdapter<T>) User.typeAdapter(gson);
+        if (rawType.equals(ApiTrack.class)) {
+            return (TypeAdapter<T>) ApiTrack.typeAdapter(gson);
+        } else if (rawType.equals(ApiUser.class)) {
+            return (TypeAdapter<T>) ApiUser.typeAdapter(gson);
         }
         return null;
     }

@@ -2,10 +2,11 @@ package com.moac.android.interceptordemo.viewmodel;
 
 import com.google.auto.value.AutoValue;
 
+import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 
 @AutoValue
-public abstract class TrackData {
+public abstract class Track {
 
     @NonNull
     public abstract Long getId();
@@ -26,12 +27,12 @@ public abstract class TrackData {
     public abstract String getDuration();
 
     @NonNull
-    public static TrackData create(long id,
-                                   @NonNull String title,
-                                   @NonNull String artist,
-                                   @NonNull String imageUrl,
-                                   long playCount,
-                                   @NonNull String duration) {
-        return new AutoValue_TrackData(id, title, artist, imageUrl, playCount, duration);
+    public static Track create(long id,
+                               @NonNull String title,
+                               @NonNull String artist,
+                               @NonNull String imageUrl,
+                               @IntRange(from = 0) long playCount,
+                               @NonNull String duration) {
+        return new AutoValue_Track(id, title, artist, imageUrl, playCount, duration);
     }
 }

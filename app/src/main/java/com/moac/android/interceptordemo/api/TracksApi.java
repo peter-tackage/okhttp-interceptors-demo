@@ -1,6 +1,6 @@
 package com.moac.android.interceptordemo.api;
 
-import com.moac.android.interceptordemo.api.model.Track;
+import com.moac.android.interceptordemo.api.model.ApiTrack;
 
 import android.support.annotation.NonNull;
 
@@ -23,7 +23,7 @@ public class TracksApi {
     }
 
     @NonNull
-    public Single<List<Track>> getTrackList(@NonNull final String genre, final long limit) {
+    public Single<List<ApiTrack>> getTrackList(@NonNull final String genre, final long limit) {
         return mSoundCloudApi.getTracks(genre, limit);
     }
 

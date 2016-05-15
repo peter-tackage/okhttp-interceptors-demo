@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 import android.support.annotation.NonNull;
 
 @AutoValue
-public abstract class User {
+public abstract class ApiUser {
 
     @SerializedName("id")
     public abstract String id();
@@ -20,12 +20,12 @@ public abstract class User {
     public abstract String uri();
 
     @NonNull
-    public static TypeAdapter<User> typeAdapter(@NonNull final Gson gson) {
-        return new AutoValue_User.GsonTypeAdapter(gson);
+    public static TypeAdapter<ApiUser> typeAdapter(@NonNull final Gson gson) {
+        return new AutoValue_ApiUser.GsonTypeAdapter(gson);
     }
 
     @NonNull
-    public static User create(String id, String username, String uri) {
-        return new AutoValue_User(id, username, uri);
+    public static ApiUser create(String id, String username, String uri) {
+        return new AutoValue_ApiUser(id, username, uri);
     }
 }
