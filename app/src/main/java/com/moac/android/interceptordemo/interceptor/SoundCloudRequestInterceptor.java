@@ -1,4 +1,6 @@
-package com.moac.android.interceptordemo.api;
+package com.moac.android.interceptordemo.interceptor;
+
+import com.moac.android.interceptordemo.api.ApiConst;
 
 import java.io.IOException;
 
@@ -6,7 +8,10 @@ import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class SoundCloudRequestInterceptor implements Interceptor {
+/**
+ * Add the SoundCloud API client identifier headers to the outgoing request.
+ */
+public final class SoundCloudRequestInterceptor implements Interceptor {
 
     private final String mClientId;
 

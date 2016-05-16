@@ -3,7 +3,6 @@ package com.moac.android.interceptordemo.module;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.moac.android.interceptordemo.interceptor.BandwidthLimitingInterceptor;
 import com.moac.android.interceptordemo.interceptor.LoggingInterceptor;
-import com.moac.android.interceptordemo.interceptor.NeverCacheInterceptor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +28,6 @@ public class InterceptorModule {
         // Comment/uncomment to experiment
         ArrayList<Interceptor> appInterceptors = new ArrayList<>();
         appInterceptors.add(new LoggingInterceptor("HTTP|SoundCloud"));
-        //  appInterceptors.add(new AssertNoCacheInterceptor());
         return appInterceptors;
     }
 
@@ -38,9 +36,7 @@ public class InterceptorModule {
     List<Interceptor> provideNetworkInterceptors(StethoInterceptor stethoInterceptor) {
         // Comment/uncomment to experiment
         ArrayList<Interceptor> networkInterceptors = new ArrayList<>();
-        //   networkInterceptors.add(new AssertNoCacheInterceptor());
         networkInterceptors.add(stethoInterceptor);
-        networkInterceptors.add(new NeverCacheInterceptor());
         return networkInterceptors;
     }
 

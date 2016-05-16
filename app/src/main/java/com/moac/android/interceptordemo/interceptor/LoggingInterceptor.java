@@ -1,5 +1,6 @@
 package com.moac.android.interceptordemo.interceptor;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.io.IOException;
@@ -9,14 +10,17 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /*
+ * Logs the request and the response.
+ *
  * This is only very slightly adapted from OkHttp Recipes version -
  * https://github.com/square/okhttp/tree/master/samples/guide/src/main/java/com/squareup/okhttp/recipes
  */
-public class LoggingInterceptor implements Interceptor {
+public final class LoggingInterceptor implements Interceptor {
 
+    @NonNull
     private final String mLogTag;
 
-    public LoggingInterceptor(String logTag) {
+    public LoggingInterceptor(@NonNull final String logTag) {
         mLogTag = logTag;
     }
 

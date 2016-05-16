@@ -10,7 +10,7 @@ import okhttp3.Response;
 /*
  * FIXME This doesn't accurately measure the bandwidth
  */
-public class BandwidthLimitingInterceptor implements Interceptor {
+public final class BandwidthLimitingInterceptor implements Interceptor {
 
     private static final String TAG = BandwidthLimitingInterceptor.class.getSimpleName();
     public static final String CONTENT_LENGTH_HEADER = "Content-Length";
