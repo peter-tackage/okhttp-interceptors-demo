@@ -11,6 +11,9 @@ import okhttp3.Response;
 
 /*
  * Logs a warning when the request or the response body exceeds an allowed threshold.
+ *
+ * Note: <i>This doesn't work for request/response types that don't provide a non-negative
+ * Content Length value, such as Chunked-Transfer-Encoding.</i>
  */
 public final class LargeBodyWarningLoggingInterceptor implements Interceptor {
 

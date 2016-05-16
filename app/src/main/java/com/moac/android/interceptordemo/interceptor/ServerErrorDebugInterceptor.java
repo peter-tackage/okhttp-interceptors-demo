@@ -36,12 +36,11 @@ public final class ServerErrorDebugInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
 
-        Response response = chain.proceed(request);
+        if (shouldError()) {
+            return serverError();
+        }
 
-        return shouldError() ?
-                serverError() :
-                response;
-
+        return chain.proceed(request);
     }
 
     private Response serverError() {
