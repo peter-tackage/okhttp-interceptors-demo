@@ -15,15 +15,15 @@ import okhttp3.ResponseBody;
 public final class ServerErrorDebugInterceptor implements Interceptor {
 
     @NonNull
-    private final Random mRandom;
-
-    @NonNull
     private final IDebugConfigurationProvider mDebugConfigurationProvider;
 
     private final int mErrorCode;
 
     @NonNull
     private final String mErrorBodyJson;
+
+    @NonNull
+    private final Random mRandom;
 
     public ServerErrorDebugInterceptor(
             @NonNull final IDebugConfigurationProvider debugConfigurationProvider,
