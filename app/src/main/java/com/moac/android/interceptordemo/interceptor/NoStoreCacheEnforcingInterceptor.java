@@ -32,7 +32,7 @@ public final class NoStoreCacheEnforcingInterceptor implements Interceptor {
 
         Response response = chain.proceed(request);
         return mDebugConfigurationProvider.isNoStoreEnabled() &&
-               matches(request.url()) ?
+               shouldNoStore(request.url()) ?
                 setNoStoreHeaders(response) :
                 response;
     }
@@ -44,12 +44,12 @@ public final class NoStoreCacheEnforcingInterceptor implements Interceptor {
                        .build();
     }
 
-    private boolean matches(final HttpUrl url) {
+    private boolean shouldNoStore(final HttpUrl url) {
         return mDebugConfigurationProvider.isNoStoreEnabled()
-               || exists(url, mDebugConfigurationProvider.getNoStoreUrlRegex());
+               && matches(url, mDebugConfigurationProvider.getNoStoreUrlRegex());
     }
 
-    private static boolean exists(final HttpUrl url, final Set<String> regexes) {
+    private static boolean matches(final HttpUrl url, final Set<String> regexes) {
         return Observable.from(regexes)
                          .exists(regex -> Pattern.matches(regex, url.toString()))
                          .toBlocking()
