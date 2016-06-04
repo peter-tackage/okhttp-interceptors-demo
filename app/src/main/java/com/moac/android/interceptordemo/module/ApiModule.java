@@ -23,7 +23,6 @@ public class ApiModule {
 
     // Required configuration settings definitions //
 
-    static final String API_CLIENT_ID = "ApiClientId";
     static final String API_ENDPOINT_URL = "ApiEndpointUrl";
 
     // Injection providers //
@@ -33,12 +32,6 @@ public class ApiModule {
     OkHttpClient provideClient(@NetworkModule.Api OkHttpClient client) {
         return client;
     }
-
-//    @Provides
-//    @Singleton
-//    RequestInterceptor provideRequestInterceptor(@Named(API_CLIENT_ID) String clientId) {
-//        return new SoundCloudRequestInterceptor(clientId);
-//    }
 
     @Provides
     @Singleton

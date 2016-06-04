@@ -16,7 +16,7 @@ public class ConfigModule {
 
     @Provides
     @Singleton
-    @Named(ApiModule.API_CLIENT_ID)
+    @Named(InterceptorModule.API_CLIENT_ID)
     String provideClientId() {
         //throw new IllegalStateException("You need to provide your own SoundCloud API client id");
         return "0a1157d1c838727363c4e01cdace18bc";
@@ -57,13 +57,6 @@ public class ConfigModule {
     @Named(NetworkModule.IMAGES_CACHE_SIZE_IN_BYTES)
     long provideImagesCacheSizeMegaBytes() {
         return 10 * 1024 * 1024; // 10MB
-    }
-
-    @Provides
-    @Singleton
-    @Named(InterceptorModule.BANDWIDTH_LIMIT_IN_BYTES)
-    long provideBandwidthLimitInBytes() {
-        return 200 * 1024; // 200KB
     }
 
 }
