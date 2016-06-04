@@ -2,6 +2,7 @@ package com.moac.android.interceptordemo.injection;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ public class InjectingFragment extends Fragment implements Injector {
     }
 
     @Override
-    public void inject(Object target) {
+    public void inject(@NonNull final Object target) {
         mObjectGraph.inject(target);
     }
 

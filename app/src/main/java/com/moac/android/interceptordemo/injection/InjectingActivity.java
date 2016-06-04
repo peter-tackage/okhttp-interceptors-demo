@@ -1,5 +1,6 @@
 package com.moac.android.interceptordemo.injection;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -17,12 +18,12 @@ public abstract class InjectingActivity extends AppCompatActivity implements Inj
     }
 
     @Override
-    public void inject(Object target) {
+    public void inject(@NonNull final Object target) {
         mObjectGraph.inject(target);
     }
 
     @Override
-    protected void onCreate(android.os.Bundle savedInstanceState) {
+    protected void onCreate(final android.os.Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mObjectGraph = ((Injector) getApplication()).getObjectGraph().plus(getModules().toArray());
         inject(this);

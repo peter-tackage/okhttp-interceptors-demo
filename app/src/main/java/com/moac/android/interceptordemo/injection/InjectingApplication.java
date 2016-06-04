@@ -1,6 +1,7 @@
 package com.moac.android.interceptordemo.injection;
 
 import android.app.Application;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ public abstract class InjectingApplication extends Application implements Inject
     }
 
     @Override
-    public void inject(Object target) {
+    public void inject(@NonNull final Object target) {
         mObjectGraph.inject(target);
     }
 
