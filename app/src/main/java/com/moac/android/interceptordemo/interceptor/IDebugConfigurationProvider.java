@@ -2,6 +2,8 @@ package com.moac.android.interceptordemo.interceptor;
 
 import android.support.annotation.IntRange;
 
+import java.util.Set;
+
 public interface IDebugConfigurationProvider {
 
     //
@@ -42,4 +44,11 @@ public interface IDebugConfigurationProvider {
 
     long getResponseSizeWarningThresholdBytes();
 
+    //
+    // No Store
+    //
+
+    boolean isNoStoreEnabled();
+
+    Set<String> getNoStoreUrlRegex();
 }

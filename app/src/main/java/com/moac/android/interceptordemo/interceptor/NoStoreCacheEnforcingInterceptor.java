@@ -12,28 +12,18 @@ import okhttp3.Request;
 import okhttp3.Response;
 import rx.Observable;
 
-import static java.util.Collections.emptySet;
-
 public final class NoStoreCacheEnforcingInterceptor implements Interceptor {
 
     private static final String CACHE_CONTROL = "Cache-Control";
 
+    private static final String NO_STORE = "no-store";
+
     @NonNull
     private final IDebugConfigurationProvider mDebugConfigurationProvider;
 
-    @NonNull
-    private final Set<String> mUrlRegexSet;
-
     public NoStoreCacheEnforcingInterceptor(
             @NonNull final IDebugConfigurationProvider debugConfigurationProvider) {
-        this(debugConfigurationProvider, emptySet());
-    }
-
-    public NoStoreCacheEnforcingInterceptor(
-            @NonNull final IDebugConfigurationProvider debugConfigurationProvider,
-            @NonNull final Set<String> urlRegexSet) {
         mDebugConfigurationProvider = debugConfigurationProvider;
-        mUrlRegexSet = urlRegexSet;
     }
 
     @Override
@@ -41,7 +31,8 @@ public final class NoStoreCacheEnforcingInterceptor implements Interceptor {
         Request request = chain.request();
 
         Response response = chain.proceed(request);
-        return matches(request.url()) ?
+        return mDebugConfigurationProvider.isNoStoreEnabled() &&
+               matches(request.url()) ?
                 setNoStoreHeaders(response) :
                 response;
     }
@@ -49,16 +40,17 @@ public final class NoStoreCacheEnforcingInterceptor implements Interceptor {
     private static Response setNoStoreHeaders(final Response response) {
         return response.newBuilder()
                        .removeHeader(CACHE_CONTROL)
-                       .addHeader(CACHE_CONTROL, "no-store")
+                       .addHeader(CACHE_CONTROL, NO_STORE)
                        .build();
     }
 
     private boolean matches(final HttpUrl url) {
-        return mUrlRegexSet.isEmpty() || exists(url);
+        return mDebugConfigurationProvider.isNoStoreEnabled()
+               || exists(url, mDebugConfigurationProvider.getNoStoreUrlRegex());
     }
 
-    private boolean exists(final HttpUrl url) {
-        return Observable.from(mUrlRegexSet)
+    private static boolean exists(final HttpUrl url, final Set<String> regexes) {
+        return Observable.from(regexes)
                          .exists(regex -> Pattern.matches(regex, url.toString()))
                          .toBlocking()
                          .single();
