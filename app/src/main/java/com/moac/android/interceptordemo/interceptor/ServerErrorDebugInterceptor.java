@@ -9,14 +9,12 @@ import android.support.annotation.VisibleForTesting;
 import java.io.IOException;
 import java.util.Random;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import rx.Observable;
 
 import static java.util.Collections.emptySet;
 
@@ -55,6 +53,7 @@ public final class ServerErrorDebugInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
 
+        // Before the actual network call, so the call doesn't actually succeed!
         if (shouldError(request)) {
             return serverError();
         }
@@ -81,14 +80,7 @@ public final class ServerErrorDebugInterceptor implements Interceptor {
     }
 
     private boolean matches(final HttpUrl url) {
-        return mUrlRegexSet.isEmpty() || exists(url);
-    }
-
-    private boolean exists(final HttpUrl url) {
-        return Observable.from(mUrlRegexSet)
-                         .exists(regex -> Pattern.matches(regex, url.toString()))
-                         .toBlocking()
-                         .single();
+        return MatchUtils.matches(url, mUrlRegexSet);
     }
 
     private boolean isError() {

@@ -19,10 +19,10 @@ import okhttp3.Response;
 public final class NetworkErrorDebugInterceptor implements Interceptor {
 
     @NonNull
-    private final Random mRandom;
+    private final IDebugConfigurationProvider mDebugConfigurationProvider;
 
     @NonNull
-    private final IDebugConfigurationProvider mDebugConfigurationProvider;
+    private final Random mRandom;
 
     public NetworkErrorDebugInterceptor(
             @NonNull final IDebugConfigurationProvider debugConfigurationProvider) {
@@ -33,8 +33,9 @@ public final class NetworkErrorDebugInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
 
+        // Before the actual network call, so the call doesn't actually succeed!
         if (shouldError()) {
-            throw new IOException("You are lucky recipient of a network error!");
+            return throwNetworkException();
         }
 
         return chain.proceed(request);
@@ -50,6 +51,10 @@ public final class NetworkErrorDebugInterceptor implements Interceptor {
 
     private boolean isError() {
         return mRandom.nextInt(99) <= mDebugConfigurationProvider.getNetworkErrorPercentage() - 1;
+    }
+
+    private Response throwNetworkException() throws IOException {
+        throw new IOException("You are lucky recipient of a network error!");
     }
 
     @VisibleForTesting

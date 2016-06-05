@@ -5,14 +5,11 @@ import com.moac.android.interceptordemo.config.IDebugConfigurationProvider;
 import android.support.annotation.NonNull;
 
 import java.io.IOException;
-import java.util.Set;
-import java.util.regex.Pattern;
 
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
-import rx.Observable;
 
 public final class NoStoreCacheEnforcingInterceptor implements Interceptor {
 
@@ -33,13 +30,12 @@ public final class NoStoreCacheEnforcingInterceptor implements Interceptor {
         Request request = chain.request();
 
         Response response = chain.proceed(request);
-        return mDebugConfigurationProvider.isNoStoreEnabled() &&
-               shouldNoStore(request.url()) ?
-                setNoStoreHeaders(response) :
-                response;
+
+        return shouldNoStore(request.url()) ? setNoStoreHeaders(response) : response;
     }
 
     private static Response setNoStoreHeaders(final Response response) {
+        // Can't modify the response CacheControl object, have to manually modify headers.
         return response.newBuilder()
                        .removeHeader(CACHE_CONTROL)
                        .addHeader(CACHE_CONTROL, NO_STORE)
@@ -47,14 +43,14 @@ public final class NoStoreCacheEnforcingInterceptor implements Interceptor {
     }
 
     private boolean shouldNoStore(final HttpUrl url) {
-        return mDebugConfigurationProvider.isNoStoreEnabled()
-               && matches(url, mDebugConfigurationProvider.getNoStoreUrlRegex());
+        return isEnabled() && matches(url);
     }
 
-    private static boolean matches(final HttpUrl url, final Set<String> regexes) {
-        return Observable.from(regexes)
-                         .exists(regex -> Pattern.matches(regex, url.toString()))
-                         .toBlocking()
-                         .single();
+    private boolean isEnabled() {
+        return mDebugConfigurationProvider.isNoStoreEnabled();
+    }
+
+    private boolean matches(final HttpUrl url) {
+        return MatchUtils.matches(url, mDebugConfigurationProvider.getNoStoreUrlRegex());
     }
 }
