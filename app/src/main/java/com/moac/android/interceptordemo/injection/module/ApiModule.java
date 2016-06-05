@@ -6,6 +6,7 @@ import com.google.gson.TypeAdapterFactory;
 
 import com.moac.android.interceptordemo.api.SoundCloudApi;
 import com.moac.android.interceptordemo.api.model.AutoValueGsonTypeAdapterFactory;
+import com.moac.android.interceptordemo.rx.ISchedulerProvider;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -53,8 +54,8 @@ public class ApiModule {
 
     @Provides
     @Singleton
-    CallAdapter.Factory provideRxJavaFactory() {
-        return RxJavaCallAdapterFactory.create();
+    CallAdapter.Factory provideRxJavaFactory(ISchedulerProvider schedulerProvider) {
+        return RxJavaCallAdapterFactory.createWithScheduler(schedulerProvider.io());
     }
 
     @Provides
@@ -77,7 +78,6 @@ public class ApiModule {
     @Singleton
     SoundCloudApi provideSoundCloudApi(Retrofit retrofit) {
         return retrofit.create(SoundCloudApi.class);
-
     }
 
 }
