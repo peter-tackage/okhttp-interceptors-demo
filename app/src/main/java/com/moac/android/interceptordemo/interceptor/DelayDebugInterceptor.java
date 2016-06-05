@@ -1,6 +1,9 @@
 package com.moac.android.interceptordemo.interceptor;
 
+import com.moac.android.interceptordemo.config.IDebugConfigurationProvider;
+
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 
 import java.io.IOException;
 import java.util.Random;
@@ -14,9 +17,12 @@ public final class DelayDebugInterceptor implements Interceptor {
     @NonNull
     private final IDebugConfigurationProvider mDebugConfigurationProvider;
 
+    @NonNull
+    private final Random mRandom;
+
     public DelayDebugInterceptor(
             @NonNull final IDebugConfigurationProvider debugConfigurationProvider) {
-        mDebugConfigurationProvider = debugConfigurationProvider;
+        this(debugConfigurationProvider, new Random());
     }
 
     @Override
@@ -31,16 +37,31 @@ public final class DelayDebugInterceptor implements Interceptor {
     }
 
     private boolean shouldDelay() {
+        return isEnabled() && isDelay();
+    }
+
+    private boolean isEnabled() {
         return mDebugConfigurationProvider.isNetworkDelayEnabled();
+    }
+
+    private boolean isDelay() {
+        return mRandom.nextInt(99) <= mDebugConfigurationProvider.getNetworkDelayPercentage() - 1;
     }
 
     private void performDelay() {
         try {
-            Random random = new Random();
-            long delay = random.nextLong() % mDebugConfigurationProvider.maxDelayInMillis();
+            long delay = mRandom.nextLong() % mDebugConfigurationProvider.maxDelayInMillis();
             Thread.sleep(delay);
         } catch (InterruptedException ignored) {
             // Do nothing, just proceed.
         }
+    }
+
+    @VisibleForTesting
+    DelayDebugInterceptor(
+            @NonNull final IDebugConfigurationProvider debugConfigurationProvider,
+            @NonNull final Random random) {
+        mDebugConfigurationProvider = debugConfigurationProvider;
+        mRandom = random;
     }
 }

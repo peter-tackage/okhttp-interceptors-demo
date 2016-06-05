@@ -35,10 +35,15 @@ public final class LoggingInterceptor implements Interceptor {
         Response response = chain.proceed(request);
 
         long t2 = System.nanoTime();
-        Log.i(mLogTag, String.format("Received response for %s in %.1fms%n%s",
+        Log.i(mLogTag, String.format("Received response for %s in %.1fms%n%s. Cached: %s",
                                      response.request().url(), (t2 - t1) / 1e6d,
-                                     response.headers()));
+                                     response.headers(),
+                                     isCached(response)));
 
         return response;
+    }
+
+    private static boolean isCached(final Response response) {
+        return response.networkResponse() == null;
     }
 }

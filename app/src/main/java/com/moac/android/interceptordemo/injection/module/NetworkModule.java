@@ -1,4 +1,4 @@
-package com.moac.android.interceptordemo.module;
+package com.moac.android.interceptordemo.injection.module;
 
 import android.content.Context;
 import android.util.Log;
@@ -104,11 +104,13 @@ public class NetworkModule {
     private static OkHttpClient createOkHttpClient(Cache cache,
                                                    List<Interceptor> appInterceptors,
                                                    List<Interceptor> networkInterceptors) {
+
         OkHttpClient client = new OkHttpClient.Builder()
                 .cache(cache)
                 .build();
-//                .add(appInterceptors)
-//                .addNetworkInterceptor(networkInterceptors);
+
+        client.newBuilder().interceptors().addAll(appInterceptors);
+        client.newBuilder().networkInterceptors().addAll(networkInterceptors);
 
         try {
             client.cache().evictAll();

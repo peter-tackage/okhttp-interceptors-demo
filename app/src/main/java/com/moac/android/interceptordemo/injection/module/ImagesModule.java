@@ -1,4 +1,4 @@
-package com.moac.android.interceptordemo.module;
+package com.moac.android.interceptordemo.injection.module;
 
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
@@ -13,8 +13,6 @@ import okhttp3.OkHttpClient;
 
 @Module(complete = false, library = true)
 public class ImagesModule {
-
-    private static final String TAG = ImagesModule.class.getSimpleName();
 
     @Provides
     @Singleton

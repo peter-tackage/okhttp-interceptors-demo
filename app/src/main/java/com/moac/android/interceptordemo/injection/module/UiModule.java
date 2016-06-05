@@ -1,4 +1,4 @@
-package com.moac.android.interceptordemo.module;
+package com.moac.android.interceptordemo.injection.module;
 
 import com.moac.android.interceptordemo.TrackDataModel;
 import com.moac.android.interceptordemo.activity.MainActivity;

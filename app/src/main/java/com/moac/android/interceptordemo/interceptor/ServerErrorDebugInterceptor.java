@@ -1,5 +1,7 @@
 package com.moac.android.interceptordemo.interceptor;
 
+import com.moac.android.interceptordemo.config.IDebugConfigurationProvider;
+
 import android.support.annotation.IntRange;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
@@ -69,9 +71,13 @@ public final class ServerErrorDebugInterceptor implements Interceptor {
     }
 
     private boolean shouldError(final Request request) {
-        return mDebugConfigurationProvider.isServerErrorEnabled()
-               && isError()
-               && matches(request.url());
+        return isEnabled()
+               && matches(request.url())
+               && isError();
+    }
+
+    private boolean isEnabled() {
+        return mDebugConfigurationProvider.isServerErrorEnabled();
     }
 
     private boolean matches(final HttpUrl url) {

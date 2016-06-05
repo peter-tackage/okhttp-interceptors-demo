@@ -1,4 +1,4 @@
-package com.moac.android.interceptordemo.interceptor;
+package com.moac.android.interceptordemo.config;
 
 import android.support.annotation.IntRange;
 
@@ -12,7 +12,7 @@ public interface IDebugConfigurationProvider {
 
     boolean isNetworkErrorEnabled();
 
-    @IntRange(from = 1, to = 100)
+    @IntRange(from = 0, to = 100)
     float getNetworkErrorPercentage();
 
     //
@@ -21,7 +21,7 @@ public interface IDebugConfigurationProvider {
 
     boolean isServerErrorEnabled();
 
-    @IntRange(from = 1, to = 100)
+    @IntRange(from = 0, to = 100)
     float getServerErrorPercentage();
 
     //
@@ -30,7 +30,7 @@ public interface IDebugConfigurationProvider {
 
     boolean isNetworkDelayEnabled();
 
-    @IntRange(from = 1, to = 100)
+    @IntRange(from = 0, to = 100)
     float getNetworkDelayPercentage();
 
     @IntRange(from = 0)

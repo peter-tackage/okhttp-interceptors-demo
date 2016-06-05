@@ -1,7 +1,7 @@
 package com.moac.android.interceptordemo;
 
-import com.moac.android.interceptordemo.module.AppModule;
-import com.moac.android.interceptordemo.module.UiModule;
+import com.moac.android.interceptordemo.injection.module.AppModule;
+import com.moac.android.interceptordemo.injection.module.UiModule;
 
 import android.app.Activity;
 import android.app.Application;

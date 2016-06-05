@@ -1,4 +1,4 @@
-package com.moac.android.interceptordemo.module;
+package com.moac.android.interceptordemo.injection.module;
 
 import javax.inject.Named;
 import javax.inject.Singleton;

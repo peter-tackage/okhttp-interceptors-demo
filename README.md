@@ -1,12 +1,11 @@
 okhttp-interceptor-demo
 =======================
 
-This app was used to demonstrate the use of OkHttp Interceptors and Facebook's Stetho library during
- my talk given as a part of the Futurice Android meetup in Helsinki on 12th March 2015.
+This app was originally used to demonstrate the use of OkHttp Interceptors and Facebook's Stetho
+library during my talk given as a part of the Futurice Android meetup in Helsinki on 12th March 2015.
 
-Note: To run this app, you will require your own SoundCloud API key.
 
-It also uses RxJava, Dagger, Retrofit and Picasso.
+It also uses RxJava, Dagger 1, Retrofit 2 and Picasso.
 
 The app makes two forms of network calls:
 
@@ -31,6 +30,8 @@ The ConfigModule provides a range of named configuration parameters required by 
 **Screenshots**
 
 ![An example screenshot](https://github.com/peter-tackage/assets/raw/master/screenshots/okhttp-interceptor-demo/Screenshot_2015-03-31-23-07-20.png)
+
+Note: To run this app, you will require your own SoundCloud API key.
 
 License
 -------

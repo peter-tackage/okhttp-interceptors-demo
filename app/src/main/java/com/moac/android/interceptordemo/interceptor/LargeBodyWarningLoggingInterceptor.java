@@ -1,5 +1,7 @@
 package com.moac.android.interceptordemo.interceptor;
 
+import com.moac.android.interceptordemo.config.IDebugConfigurationProvider;
+
 import android.support.annotation.NonNull;
 import android.util.Log;
 

@@ -1,5 +1,7 @@
 package com.moac.android.interceptordemo.interceptor;
 
+import com.moac.android.interceptordemo.config.IDebugConfigurationProvider;
+
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 
@@ -39,7 +41,11 @@ public final class NetworkErrorDebugInterceptor implements Interceptor {
     }
 
     private boolean shouldError() {
-        return mDebugConfigurationProvider.isNetworkErrorEnabled() && isError();
+        return isEnabled() && isError();
+    }
+
+    private boolean isEnabled() {
+        return mDebugConfigurationProvider.isNetworkErrorEnabled();
     }
 
     private boolean isError() {

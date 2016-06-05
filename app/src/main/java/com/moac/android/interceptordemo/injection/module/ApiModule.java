@@ -1,4 +1,4 @@
-package com.moac.android.interceptordemo.module;
+package com.moac.android.interceptordemo.injection.module;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
